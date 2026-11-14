@@ -1,0 +1,13 @@
+Base de datos del sistema (PostgreSQL)
+======================================
+
+comlapaz.sql  Respaldo completo de la base "comlapaz" (tablas y datos),
+              generado con pg_dump 14 el 14/11/2026.
+
+Para restaurarla en una base vacía:
+
+    createdb -U postgres comlapaz
+    psql -U postgres -d comlapaz -f comlapaz.sql
+
+Después configure los datos de conexión en el archivo .env del proyecto
+(DB_DATABASE, DB_USERNAME, DB_PASSWORD).

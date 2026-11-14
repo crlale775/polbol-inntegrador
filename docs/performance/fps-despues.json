@@ -1,0 +1,17 @@
+{
+  "portada": {
+    "escena": "{\"fps\":59.9,\"drawCalls\":129,\"triangulos\":26326,\"cpuMedioMs\":2.51,\"dpr\":1}",
+    "general": "{\"ruta\":\"/\",\"muestras\":300,\"fps\":59.9,\"intervaloMedianoMs\":16.699999999999818,\"intervaloP95Ms\":16.800000000000182,\"cuadrosMayores34ms\":0,\"tareasLargas\":2,\"primerByteMs\":736.7,\"escena\":{\"fps\":59.9,\"drawCalls\":129,\"triangulos\":26326,\"cpuMedioMs\":2.65,\"dpr\":1}}"
+  },
+  "panelGeneral": {
+    "ruta": "/comando-general/dashboard",
+    "muestras": 298,
+    "fps": 59.5,
+    "intervaloMedianoMs": 16.699999999999818,
+    "intervaloP95Ms": 16.899999999999636,
+    "cuadrosMayores34ms": 0,
+    "tareasLargas": 0,
+    "primerByteMs": 1168.8,
+    "escena": null
+  }
+}

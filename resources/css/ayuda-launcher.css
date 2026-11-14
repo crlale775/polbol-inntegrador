@@ -1,0 +1,22 @@
+.capi-dock{position:fixed;right:22px;bottom:18px;z-index:65;width:84px;height:116px;contain:layout style}
+.policia-help-launcher.capi-launcher{position:relative;display:block;width:84px;height:116px;padding:30px 0 0;border:0;background:transparent;border-radius:50%;cursor:pointer;color:#285343;touch-action:manipulation}
+.capi-circle{position:relative;display:grid;place-items:center;width:84px;height:84px;border-radius:50%;border:2px solid #b8c99e;background:#f5f8ed;box-shadow:0 5px 18px #102e242b;overflow:hidden;transform-origin:50% 100%;transition:transform .3s ease-out,border-color .2s ease-out}
+.capi-launch-image{width:70px;height:81px;object-fit:contain;align-self:end;margin-bottom:-2px;pointer-events:none}
+.capi-name{position:absolute;bottom:0;inset-inline:0;padding:3px 0 4px;background:#0f3327f2;color:#fffefa;font-size:10px;line-height:1.2;letter-spacing:.03em;font-weight:800;text-align:center}
+.capi-caption{position:absolute;top:0;left:50%;transform:translateX(-50%);white-space:nowrap;border:1px solid #c6d4bb;border-radius:20px;background:#fffefa;padding:5px 12px;font-size:12px;line-height:1.4;font-weight:800;box-shadow:0 2px 8px #102e2414}
+.capi-caption:after{content:'';position:absolute;bottom:-4px;left:calc(50% - 3px);width:6px;height:6px;transform:rotate(45deg);background:#fffefa;border-right:1px solid #c6d4bb;border-bottom:1px solid #c6d4bb}
+.capi-launcher:hover .capi-circle{transform:translateY(-2px);border-color:#285343}.capi-launcher:disabled{opacity:.7;cursor:wait}.capi-launcher:focus-visible{outline:3px solid #ad7726;outline-offset:5px}
+.capi-bubble{position:absolute;right:0;bottom:132px;display:flex;align-items:flex-start;gap:5px;width:270px;max-width:calc(100vw - 32px);padding:11px 8px 11px 14px;border:1px solid #cbdac7;border-radius:15px 15px 3px 15px;background:#fffefa;color:#285343;box-shadow:0 6px 24px #153c3018;font-size:13px;line-height:1.6;animation:capi-saludo .2s ease-out}
+.capi-bubble>span{padding-top:3px;flex:1}.capi-bubble>button{display:grid;place-items:center;min-width:44px;min-height:44px;border-radius:9px;cursor:pointer}.capi-bubble>button:hover{background:#edf3e8}
+.policia-help-loading{position:fixed;bottom:152px;right:22px;max-width:300px;padding:12px;border:1px solid #dce4db;border-radius:9px;background:#fffefa;color:#285343;font-size:13px;z-index:66}
+.ofbol-workspace::after{content:'';display:block;height:140px;flex-shrink:0;pointer-events:none}.ofbol-upload-stack{bottom:155px}
+body.driver-active{overscroll-behavior:none}body:has([aria-modal="true"]) .capi-bubble{display:none}
+@keyframes capi-saludo{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.capi-dock{right:14px;bottom:calc(12px + env(safe-area-inset-bottom));width:68px;height:99px}.policia-help-launcher.capi-launcher{width:68px;height:99px}.capi-circle{width:68px;height:68px}.capi-launch-image{width:58px;height:68px}.capi-caption{font-size:11px;padding:5px 10px}.capi-bubble{bottom:113px}body:has([aria-modal="true"]) .capi-dock{bottom:2px;right:8px;width:44px;height:44px}body:has([aria-modal="true"]) .capi-launcher{width:44px;height:44px;padding:0}body:has([aria-modal="true"]) .capi-circle{width:44px;height:44px}body:has([aria-modal="true"]) .capi-launch-image{width:36px;height:42px}body:has([aria-modal="true"]) .capi-name{font-size:8px;padding:1px}body:has([aria-modal="true"]) .capi-caption{display:none}}
+@media(prefers-reduced-motion:reduce){.capi-bubble{animation:none}.capi-circle{transition:none}.capi-launcher:hover .capi-circle{transform:none}}
+/* Aparición y saludo de Capi (2026-11-13): sin rebotes ni giros; solo opacidad y un desplazamiento corto. */
+.capi-dock{animation:capi-aparece .45s cubic-bezier(.16,1,.3,1) .1s both}
+body:has(.pb-access-transition) .capi-dock{animation:none;opacity:0;pointer-events:none}
+.capi-circle--saluda{transform:scale(1.1);border-color:#285343}
+@keyframes capi-aparece{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.capi-dock{animation:none}.capi-circle--saluda{transform:none}}

@@ -1,0 +1,31 @@
+/* Entrada institucional: el escudo se presenta, se desliza a su lugar y el panel se descubre en círculo. */
+@property --pb-hueco { syntax:'<length>'; inherits:false; initial-value:0px; }
+.pb-access-transition { position:fixed; inset:0; z-index:12000; display:grid; place-items:center; overflow:hidden; background:#0a241b; color:#f3f7ed; animation:pb-access-in .18s ease-out; }
+.pb-access-transition::before { content:''; position:absolute; inset:0; background:radial-gradient(52% 44% at 50% 46%, #17463633 0%, #17463600 100%); pointer-events:none; }
+.pb-access-transition-centro { position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; padding:24px; }
+.pb-access-transition-mark { position:relative; width:148px; height:148px; display:grid; place-items:center; margin-bottom:26px; }
+.pb-access-transition-sello { display:block; animation:pb-access-sello .5s cubic-bezier(.34,1.56,.64,1) both; }
+.pb-access-transition-escudo { display:block; width:78px; height:104px; }
+.pb-access-transition-aro { position:absolute; inset:0; border:1px solid #cfe0c726; border-top:2px solid #c9b46a; border-radius:50%; animation:pb-access-spin 1.4s linear infinite; }
+.pb-access-transition-texto { animation:pb-access-texto .45s ease-out .12s both; }
+.pb-access-transition-texto > strong { display:block; font-size:26px; line-height:1.2; font-weight:800; letter-spacing:.01em; }
+.pb-access-transition-texto > p { font-size:14px; color:#b9cdbd; margin-top:8px; }
+.pb-access-transition-progress { width:148px; height:3px; border-radius:4px; margin:26px auto 0; background:#c9b46a; transform-origin:left; animation:pb-access-progress 1.3s ease-in-out infinite; }
+
+/* Salida: el texto se retira, el escudo viaja a su lugar y el velo se abre desde allí con borde suave. */
+.pb-access-transition[data-fase="salida"] { pointer-events:none; animation:pb-access-hueco .95s cubic-bezier(.6,0,.2,1) .6s both; -webkit-mask-image:radial-gradient(circle at var(--pb-x,50%) var(--pb-y,50%), transparent calc(var(--pb-hueco) - 48px), #000 var(--pb-hueco)); mask-image:radial-gradient(circle at var(--pb-x,50%) var(--pb-y,50%), transparent calc(var(--pb-hueco) - 48px), #000 var(--pb-hueco)); }
+.pb-access-transition[data-fase="salida"] .pb-access-transition-texto { animation:pb-access-fuera .3s ease-in both; }
+.pb-access-transition[data-fase="salida"] .pb-access-transition-aro { animation:pb-access-aro-fuera .35s ease-in both; }
+.pb-access-transition[data-fase="salida"] .pb-access-transition-sello { animation:pb-access-viaje .8s cubic-bezier(.65,0,.35,1) both; will-change:transform; }
+
+@keyframes pb-access-in { from { opacity:0; } to { opacity:1; } }
+@keyframes pb-access-sello { from { opacity:0; transform:scale(.72); } to { opacity:1; transform:scale(1); } }
+@keyframes pb-access-texto { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+@keyframes pb-access-fuera { to { opacity:0; transform:translateY(6px); } }
+@keyframes pb-access-spin { to { transform:rotate(360deg); } }
+@keyframes pb-access-progress { 0%,100% { transform:scaleX(.25); opacity:.5; } 50% { transform:scaleX(1); opacity:1; } }
+@keyframes pb-access-hueco { from { --pb-hueco:0px; } to { --pb-hueco:160vmax; } }
+@keyframes pb-access-viaje { from { transform:translate(0,0) scale(1); } to { transform:translate(var(--pb-dx,0px),var(--pb-dy,0px)) scale(var(--pb-escala,1)); } }
+@keyframes pb-access-aro-fuera { to { opacity:0; transform:scale(1.25); } }
+@media (max-width:600px) { .pb-access-transition-mark { width:124px; height:124px; } .pb-access-transition-escudo { width:64px; height:85px; } .pb-access-transition-texto > strong { font-size:22px; } }
+@media (prefers-reduced-motion:reduce) { .pb-access-transition, .pb-access-transition * { animation:none!important; transition:none!important; } .pb-access-transition-progress { opacity:.7; } }

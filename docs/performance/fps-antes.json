@@ -1,0 +1,4 @@
+{
+  "escena": "{\"fps\":30,\"drawCalls\":281,\"triangulos\":26326,\"cpuMedioMs\":4.09,\"dpr\":1}",
+  "general": "{\"ruta\":\"/\",\"muestras\":284,\"fps\":56.7,\"intervaloMedianoMs\":16.699999999999818,\"intervaloP95Ms\":16.899999999999636,\"cuadrosMayores34ms\":1,\"tareasLargas\":3,\"primerByteMs\":669,\"escena\":{\"fps\":29.5,\"drawCalls\":281,\"triangulos\":26326,\"cpuMedioMs\":3.74,\"dpr\":1}}"
+}

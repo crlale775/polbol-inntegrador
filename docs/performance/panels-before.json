@@ -1,0 +1,83 @@
+{
+    "unidad": [
+        {
+            "ms": 116.85,
+            "queries": 9,
+            "responseBytes": 4313
+        },
+        {
+            "ms": 14.99,
+            "queries": 9,
+            "responseBytes": 4313
+        },
+        {
+            "ms": 13.55,
+            "queries": 9,
+            "responseBytes": 4313
+        },
+        {
+            "ms": 12.05,
+            "queries": 9,
+            "responseBytes": 4313
+        },
+        {
+            "ms": 11.73,
+            "queries": 9,
+            "responseBytes": 4313
+        }
+    ],
+    "departamental": [
+        {
+            "ms": 23.58,
+            "queries": 12,
+            "responseBytes": 5888
+        },
+        {
+            "ms": 17.25,
+            "queries": 12,
+            "responseBytes": 5888
+        },
+        {
+            "ms": 15.84,
+            "queries": 12,
+            "responseBytes": 5888
+        },
+        {
+            "ms": 16.54,
+            "queries": 12,
+            "responseBytes": 5888
+        },
+        {
+            "ms": 16.18,
+            "queries": 12,
+            "responseBytes": 5888
+        }
+    ],
+    "general": [
+        {
+            "ms": 21.06,
+            "queries": 19,
+            "responseBytes": 5744
+        },
+        {
+            "ms": 22.03,
+            "queries": 19,
+            "responseBytes": 5744
+        },
+        {
+            "ms": 22.77,
+            "queries": 19,
+            "responseBytes": 5744
+        },
+        {
+            "ms": 21.79,
+            "queries": 19,
+            "responseBytes": 5744
+        },
+        {
+            "ms": 19.86,
+            "queries": 19,
+            "responseBytes": 5744
+        }
+    ]
+}

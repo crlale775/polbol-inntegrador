@@ -1,0 +1,16 @@
+Fotografías de la portada (página de inicio)
+
+Coloque aquí fotografías reales de la Policía Boliviana con estos nombres:
+  preparar.jpg     Secretaría EPI / trabajo con documentación
+  revisar.jpg      Comando Departamental / revisión de expedientes
+  seguimiento.jpg  Formación institucional / registro
+  galeria-1.jpg    Servicio a la ciudadanía
+  galeria-2.jpg    Estación Policial Integral
+  galeria-3.jpg    Comando Departamental La Paz
+
+Recomendado: 1600 px de ancho o más, horizontales, menos de 400 KB cada una.
+Use solo imágenes que la institución autorice publicar o que tengan una licencia
+libre (por ejemplo, Wikimedia Commons). Escriba el crédito correspondiente en
+resources/js/components/landing/fotosInicio.js.
+Si falta un archivo, su espacio no se muestra. Después de agregar fotos no hace
+falta recompilar: se cargan directamente desde esta carpeta.

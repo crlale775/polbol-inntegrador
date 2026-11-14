@@ -1,0 +1,51 @@
+.policia-help { color:#192d27; font-size:14px; }
+.policia-help-intro { display:flex; align-items:center; gap:20px; padding-bottom:17px; }
+.policia-help-intro>div { flex:1; min-width:0; }
+.policia-help-intro>img { width:90px; height:105px; object-fit:contain; flex-shrink:0; }
+.policia-help-label { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:#285343; }
+.policia-help-intro h2 { font-size:25px; line-height:1.2; font-weight:800; letter-spacing:-.03em; margin:9px 0; text-wrap:balance; }
+.policia-help-intro p { font-size:14px; line-height:1.65; color:#53655b; }
+.policia-help-start { display:flex; gap:10px; align-items:center; justify-content:center; width:100%; min-height:48px; padding:12px 15px; background:#285343; color:white; border:1px solid #285343; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; }
+.policia-help-start>svg:last-child { margin-left:auto; }
+.policia-help-start:hover { background:#193e30; }
+.policia-help button:disabled { opacity:.55; cursor:wait; }
+.policia-help button:focus-visible, .policia-help summary:focus-visible { outline:3px solid #ad7726; outline-offset:3px; }
+.policia-help-meta { display:flex; justify-content:space-between; gap:12px; align-items:center; flex-wrap:wrap; font-size:11px; color:#53655b; padding:7px 0 16px; }
+.policia-help-meta>span, .policia-help-meta>button { display:flex; align-items:center; gap:5px; }
+.policia-help-meta>button { min-height:44px; padding:5px; font-size:11px; color:#285343; text-decoration:underline; cursor:pointer; }
+.policia-help-section { font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; margin:3px 0 12px; }
+.policia-help-topics { display:grid; gap:8px; }
+.policia-help-topics>button { display:flex; align-items:center; gap:12px; text-align:left; min-height:48px; border:1px solid #dce4db; border-radius:9px; padding:10px 13px; background:#fffefa; cursor:pointer; }
+.policia-help-topics>button:hover { background:#edf3e8; border-color:#9bb69a; }
+.policia-help-topics>button>span { flex-shrink:0; display:grid; place-items:center; height:27px; width:27px; border-radius:7px; background:#edf3e8; color:#285343; font-size:11px; font-weight:800; }
+.policia-help-topics strong { font-size:13px; font-weight:650; flex:1; }
+.policia-help-topics svg { color:#68836b; flex-shrink:0; }
+.policia-help-tips { margin-top:16px; padding:12px 15px; background:#f0f4eb; border-radius:9px; color:#53655b; font-size:12px; line-height:1.7; }
+.policia-help-tips summary { min-height:28px; color:#285343; font-weight:700; cursor:pointer; }
+.policia-help-tips p { margin-top:7px; }
+.policia-help-footer { font-size:11px; color:#53655b; line-height:1.6; margin-top:15px; }
+.policia-help-error { border:1px solid #e1bcb3; background:#fff4f1; border-radius:8px; padding:12px; margin-bottom:14px; color:#853b30; font-size:13px; }
+.driver-popover.policia-guide-popover { width:350px; max-width:calc(100vw - 28px); padding:19px 21px 14px; border:1px solid #c6d6c5; border-radius:16px; box-shadow:0 16px 60px #102e2438; color:#192d27; background:#fffefa; font-family:inherit; }
+.policia-guide-intro { display:flex; align-items:center; gap:13px; margin:-4px 22px 10px 0; min-height:77px; }
+.policia-guide-avatar { width:66px; height:77px; object-fit:contain; flex-shrink:0; }
+.policia-guide-badge { display:block; max-width:170px; color:#285343; font-size:10px; letter-spacing:.08em; font-weight:800; line-height:1.8; }
+.policia-guide-popover .driver-popover-title { font-size:20px; font-weight:800; line-height:1.25; letter-spacing:-.02em; margin-bottom:10px; }
+.policia-guide-popover .driver-popover-description { font-size:14px; color:#53655b; line-height:1.65; }
+.policia-guide-popover .driver-popover-footer { display:flex; align-items:center; gap:10px; margin-top:20px; }
+.policia-guide-popover .driver-popover-progress-text { color:#53655b; font-size:11px; }
+.policia-guide-popover .driver-popover-navigation-btns { display:flex; gap:7px; }
+.policia-guide-popover .driver-popover-footer button { min-height:44px; padding:10px 12px; border-radius:8px; border:1px solid #cbd8cc; background:white; color:#285343; font-size:12px; font-weight:700; text-shadow:none; box-shadow:none; }
+.policia-guide-popover .driver-popover-footer .driver-popover-next-btn { background:#285343; color:white; border-color:#285343; }
+.policia-guide-popover .driver-popover-close-btn { width:44px; height:44px; top:4px; right:4px; color:#53655b; border-radius:8px; font-size:26px; }
+.policia-guide-popover .driver-popover-close-btn:hover { background:#edf3e8; color:#192d27; }
+.policia-guide-popover button:focus-visible { outline:3px solid #ad7726; outline-offset:2px; }
+.policia-guide-popover .policia-guide-pause { display:block; min-height:44px; margin:7px 0 -5px auto; padding:5px 0; color:#53655b; font:inherit; font-size:10px; text-decoration:underline; cursor:pointer; }
+.policia-guide-popover .driver-popover-arrow-side-left { border-left-color:#fffefa; }
+.policia-guide-popover .driver-popover-arrow-side-right { border-right-color:#fffefa; }
+.policia-guide-popover .driver-popover-arrow-side-top { border-top-color:#fffefa; }
+.policia-guide-popover .driver-popover-arrow-side-bottom { border-bottom-color:#fffefa; }
+@media(max-width:600px) { .policia-help-intro { gap:12px; } .policia-help-intro>img { width:70px; height:82px; } .policia-help-intro h2 { font-size:22px; } .driver-popover.policia-guide-popover { padding:15px 17px 12px; } .policia-guide-intro { min-height:63px; margin-bottom:7px; } .policia-guide-avatar { width:54px; height:63px; } .policia-guide-popover .driver-popover-description { font-size:13px; line-height:1.6; } .policia-guide-popover .driver-popover-title { font-size:18px; } }
+@media(prefers-reduced-motion:reduce) { .driver-overlay, .driver-popover { transition:none!important; animation:none!important; } }
+
+.policia-help-navigation { display:flex; align-items:center; gap:8px; width:100%; min-height:44px; margin-top:13px; padding:10px 0; color:#285343; font-size:12px; font-weight:700; cursor:pointer; }
+.policia-help-navigation>svg:last-child { margin-left:auto; }

@@ -1,0 +1,28 @@
+{
+  "measuredAt": "2026-11-09T13:40:38.698Z",
+  "description": "Static dependencies of Vite entry points; excludes route downloads and images.",
+  "bytes": 469598,
+  "gzipBytes": 125766,
+  "assets": [
+    {
+      "file": "assets/app-DJ91sQ90.css",
+      "bytes": 150714,
+      "gzipBytes": 26933
+    },
+    {
+      "file": "assets/app-BzYbzggE.js",
+      "bytes": 232946,
+      "gzipBytes": 72795
+    },
+    {
+      "file": "assets/lucide-CJqGoEOE.js",
+      "bytes": 43356,
+      "gzipBytes": 10757
+    },
+    {
+      "file": "assets/react-CN2YixJC.js",
+      "bytes": 42582,
+      "gzipBytes": 15281
+    }
+  ]
+}

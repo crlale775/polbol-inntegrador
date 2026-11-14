@@ -1,0 +1,26 @@
+{
+  "fecha": "2026-11-09T22:12:11.619Z",
+  "nota": "Peticiones secuenciales locales; primera petición de calentamiento excluida.",
+  "servidores": {
+    "8000": {
+      "muestrasMs": [
+        563.12,
+        515.57,
+        469.82,
+        485.54,
+        1122.07
+      ],
+      "medianaMs": 515.57
+    },
+    "8001": {
+      "muestrasMs": [
+        182.2,
+        207.06,
+        195.36,
+        184.55,
+        184.25
+      ],
+      "medianaMs": 184.55
+    }
+  }
+}

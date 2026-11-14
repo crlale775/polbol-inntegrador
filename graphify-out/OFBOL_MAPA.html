@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OFBOL — Mapa del proyecto</title>
+<style>
+:root{color-scheme:light dark;--fg:#1d1d1f;--bg:#fbfbf9;--mut:#6b6b6b;--line:#e4e2dc;--acc:#2f5d50}
+@media (prefers-color-scheme:dark){:root{--fg:#ecebe6;--bg:#151514;--mut:#9a9a94;--line:#2c2c2a;--acc:#8cc7b2}}
+body{font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--fg);background:var(--bg);max-width:1100px;margin:0 auto;padding:32px 20px 80px}
+h1{font-size:26px;margin:0 0 8px} h2{font-size:19px;margin:36px 0 10px;padding-top:14px;border-top:1px solid var(--line);color:var(--acc)}
+h3{font-size:15px;margin:18px 0 4px} p{color:var(--mut);margin:4px 0}
+li{list-style:none;padding:3px 0 3px 12px;border-left:2px solid var(--line);margin:2px 0;font-size:14px}
+code{font:12.5px ui-monospace,Consolas,monospace;background:color-mix(in srgb,var(--line) 60%,transparent);padding:1px 5px;border-radius:4px}
+#q{position:sticky;top:0;width:100%;box-sizing:border-box;padding:10px 12px;font-size:15px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);margin:12px 0}
+</style></head><body>
+<input id="q" placeholder="Filtrar (ej. Documento, /api/revisiones, Dashboard)…" autocomplete="off">
+<h1>OFBOL — Mapa del proyecto (generado con Graphify)
+</h1><p>Pega este archivo (o el HTML) al inicio de cada chat para que Claude tenga el contexto del proyecto.</p><p>Fuente completa e interactiva: <code>graphify-out/graph.html</code>, <code>graphify-out/graph.json</code>, <code>graphify-out/GRAPH_REPORT.md</code>.
+</p><h2>Stack</h2><li>Backend: Laravel 13 (PHP 8.3) · <code>app/Http/Controllers</code> (36) · <code>app/Models</code> (28) · <code>app/Services</code> (9) · middleware <code>SesionActiva</code>, <code>PermisosInstitucionales</code>, <code>SecurityHeaders</code></li><li>Frontend: React SPA (Vite) montada desde <code>resources/js/app.jsx</code>; vistas en <code>resources/views/&lt;rol&gt;/*.jsx</code>; cliente HTTP <code>resources/js/lib/api.js</code> (base <code>/api</code>, CSRF por cookie XSRF)</li><li><code>routes/web.php</code> sirve la SPA para cualquier ruta; toda la API vive en <code>routes/api.php</code> (rutas protegidas por sesión + permisos institucionales)</li><li>Roles: secretario_unidad (EPI) · secretario_comando_departamental · comando_general
+</li><h2>Pantallas SPA → vista → endpoints que llama</h2><li><code>/</code> → <code>resources/views/inicio/Inicio.jsx</code></li><li><code>/comando-departamental/dashboard</code> → <code>resources/views/secretario_comando_departamental/Dashboard.jsx</code> → GET /api/panel/departamental</li><li><code>/comando-departamental/desempenio</code> → <code>resources/views/secretario_comando_departamental/DesempenioEpis.jsx</code> [vía DesempenioEpisPanel.jsx: GET /api/desempenio-epis]</li><li><code>/comando-departamental/documentos-epi</code> → <code>resources/views/secretario_comando_departamental/DocumentosPorEpi.jsx</code> → GET /api/documentos, GET /api/epis</li><li><code>/comando-departamental/historial</code> → <code>resources/views/secretario_comando_departamental/Historial.jsx</code> → GET /api/documentos, GET /api/epis, GET /api/historial-estados</li><li><code>/comando-departamental/notificaciones</code> → <code>resources/views/secretario_comando_departamental/Notificaciones.jsx</code> → GET /api/me, PUT /api/notificaciones/{id}</li><li><code>/comando-departamental/observaciones</code> → <code>resources/views/secretario_comando_departamental/Observaciones.jsx</code> → GET /api/documentos, GET /api/epis, GET /api/revisiones</li><li><code>/comando-departamental/perfil</code> → <code>resources/views/secretario_comando_departamental/Perfil.jsx</code></li><li><code>/comando-departamental/reportes</code> → <code>resources/views/secretario_comando_departamental/Reportes.jsx</code> [vía ReportesEngine.jsx: GET /api/reportes, GET /api/reportes/exportar]</li><li><code>/comando-departamental/revision</code> → <code>resources/views/secretario_comando_departamental/RevisarDocumentos.jsx</code> → GET /api/documentos, GET /api/documentos/{id}, GET /api/epis, GET /api/estados-documento, GET /api/tipos-documento, GET /api/tipos-observacion, POST /api/notificaciones, POST /api/revisiones, PUT /api/documentos/{id}</li><li><code>/comando-departamental/secretarios</code> → <code>resources/views/secretario_comando_departamental/GestionSecretarios.jsx</code> → GET /api/epis, GET /api/usuarios, POST /api/usuarios, POST /api/usuarios/{id}/reset-password, PUT /api/usuarios/{id}</li><li><code>/comando-departamental/trazabilidad</code> → <code>resources/views/secretario_comando_departamental/Trazabilidad.jsx</code> [vía RecorridoInstitucional.jsx: GET /api/documentos, GET /api/documentos/{id}/trazabilidad, GET /api/epis]</li><li><code>/comando-general/auditoria</code> → <code>resources/views/comando_general/Auditoria.jsx</code> → GET /api/auditorias, GET /api/epis</li><li><code>/comando-general/comparativo</code> → <code>resources/views/comando_general/ComparativoGeneral.jsx</code> [vía DesempenioEpisPanel.jsx: GET /api/desempenio-epis]</li><li><code>/comando-general/dashboard</code> → <code>resources/views/comando_general/Dashboard.jsx</code> → GET /api/panel/general</li><li><code>/comando-general/directorio</code> → <code>resources/views/comando_general/DirectorioInstitucional.jsx</code> → GET /api/epis, GET /api/grados, GET /api/oficiales</li><li><code>/comando-general/documentos</code> → <code>resources/views/comando_general/DocumentosAprobados.jsx</code> → GET /api/documentos, GET /api/documentos/{id}, GET /api/epis, GET /api/estados-documento, GET /api/revisiones, GET /api/tipos-documento, POST /api/notificaciones, POST /api/revisiones, PUT /api/documentos/{id}</li><li><code>/comando-general/historial</code> → <code>resources/views/comando_general/Historial.jsx</code> → GET /api/documentos, GET /api/epis</li><li><code>/comando-general/notificaciones</code> → <code>resources/views/comando_general/Notificaciones.jsx</code> → GET /api/me, PUT /api/notificaciones/{id}</li><li><code>/comando-general/perfil</code> → <code>resources/views/comando_general/Perfil.jsx</code></li><li><code>/comando-general/registro</code> → <code>resources/views/comando_general/RegistroDocumental.jsx</code> → GET /api/documentos, GET /api/epis, GET /api/tipos-documento</li><li><code>/comando-general/registro-oficiales</code> → <code>resources/views/comando_general/RegistroOficialesIA.jsx</code> → GET /api/epis, GET /api/registro-links, GET /api/roles, GET /api/solicitudes-registro, GET /api/solicitudes-registro/{id}, POST /api/registro-links, POST /api/registro-links/{id}/cancelar, POST /api/solicitudes-registro/{id}/adjuntos, POST /api/solicitudes-registro/{id}/aprobar, POST /api/solicitudes-registro/{id}/rechazar, POST /api/solicitudes-registro/{id}/verificar-ia</li><li><code>/comando-general/reportes</code> → <code>resources/views/comando_general/Reportes.jsx</code> [vía ReportesEngine.jsx: GET /api/reportes, GET /api/reportes/exportar]</li><li><code>/comando-general/tipos-memo</code> → <code>resources/views/comando_general/GestionTiposMemo.jsx</code> → DELETE /api/tipos-memo/{id}, GET /api/tipos-memo, POST /api/tipos-memo, PUT /api/tipos-memo/{id} [vía SugerenciasTipos.jsx: POST /api/tipos-memo/sugerencias/decision]</li><li><code>/comando-general/trazabilidad</code> → <code>resources/views/comando_general/Trazabilidad.jsx</code> [vía RecorridoInstitucional.jsx: GET /api/documentos, GET /api/documentos/{id}/trazabilidad, GET /api/epis]</li><li><code>/comando-general/usuarios</code> → <code>resources/views/comando_general/GestionUsuarios.jsx</code> → GET /api/epis, GET /api/roles, GET /api/usuarios, POST /api/usuarios, PUT /api/usuarios/{id}</li><li><code>/login</code> → <code>resources/views/login/Login.jsx</code> → POST /api/login [vía Auditoria.jsx: GET /api/auditorias, GET /api/epis; vía Correcciones.jsx: GET /api/documentos/{id}, GET /api/me, GET /api/sync/ping, POST /api/documentos/{id}/preparar-subsanacion, POST /api/documentos/{id}/subsanar, POST /api/upload-documento; vía Dashboard.jsx: GET /api/notificaciones, GET /api/panel/departamental, GET /api/panel/general, GET /api/panel/unidad; vía DirectorioInstitucional.jsx: GET /api/epis, GET /api/grados, GET /api/oficiales; vía DocumentosAprobados.jsx: GET /api/documentos, GET /api/documentos/{id}, GET /api/epis, GET /api/estados-documento, GET /api/revisiones, GET /api/tipos-documento, POST /api/notificaciones, POST /api/revisiones, PUT /api/documentos/{id}; vía DocumentosPorEpi.jsx: GET /api/documentos, GET /api/epis; vía GestionSecretarios.jsx: GET /api/epis, GET /api/usuarios, POST /api/usuarios, POST /api/usuarios/{id}/reset-password, PUT /api/usuarios/{id}; vía GestionTiposMemo.jsx: DELETE /api/tipos-memo/{id}, GET /api/tipos-memo, POST /api/tipos-memo, PUT /api/tipos-memo/{id}; vía GestionUsuarios.jsx: GET /api/epis, GET /api/roles, GET /api/usuarios, POST /api/usuarios, PUT /api/usuarios/{id}; vía Historial.jsx: GET /api/documentos, GET /api/epis, GET /api/historial-estados, GET /api/me; vía MisDocumentos.jsx: GET /api/estados-documento, GET /api/me, GET /api/revisiones, GET /api/tipos-documento; vía Notificaciones.jsx: GET /api/me, PUT /api/notificaciones/{id}; vía Observaciones.jsx: GET /api/documentos, GET /api/epis, GET /api/revisiones; vía OficialesEpi.jsx: GET /api/cargos, GET /api/documentos, GET /api/grados, GET /api/me; vía Perfil.jsx: POST /api/upload-foto; vía Plantillas.jsx: GET /api/plantillas, GET /api/plantillas/{id}/archivo; vía RegistroDocumental.jsx: GET /api/documentos, GET /api/epis, GET /api/tipos-documento; vía RegistroOficialesIA.jsx: GET /api/epis, GET /api/registro-links, GET /api/roles, GET /api/solicitudes-registro, GET /api/solicitudes-registro/{id}, POST /api/registro-links, POST /api/registro-links/{id}/cancelar, POST /api/solicitudes-registro/{id}/adjuntos, POST /api/solicitudes-registro/{id}/aprobar, POST /api/solicitudes-registro/{id}/rechazar, POST /api/solicitudes-registro/{id}/verificar-ia; vía RevisarDocumentos.jsx: GET /api/documentos, GET /api/documentos/{id}, GET /api/epis, GET /api/estados-documento, GET /api/tipos-documento, GET /api/tipos-observacion, POST /api/notificaciones, POST /api/revisiones, PUT /api/documentos/{id}; vía SubirDocumento.jsx: GET /api/estados-documento, GET /api/me, GET /api/sync/ping, GET /api/tipos-documento, POST /api/documentos, POST /api/documentos/preparar-envio, POST /api/upload-documento]</li><li><code>/registro-oficial/:token</code> → <code>resources/views/login/RegistroOficial.jsx</code> → GET /api/registro-links/publico/{token}, POST /api/registro-publico/{token}</li><li><code>/secretario/correcciones</code> → <code>resources/views/secretario_unidad/Correcciones.jsx</code> → GET /api/documentos/{id}, GET /api/me, GET /api/sync/ping, POST /api/documentos/{id}/preparar-subsanacion, POST /api/documentos/{id}/subsanar, POST /api/upload-documento [vía revisionDocumento.js: POST /api/documentos/revisar-ia]</li><li><code>/secretario/dashboard</code> → <code>resources/views/secretario_unidad/Dashboard.jsx</code> → GET /api/notificaciones, GET /api/panel/unidad</li><li><code>/secretario/historial</code> → <code>resources/views/secretario_unidad/Historial.jsx</code> → GET /api/historial-estados, GET /api/me</li><li><code>/secretario/mis-documentos</code> → <code>resources/views/secretario_unidad/MisDocumentos.jsx</code> → GET /api/estados-documento, GET /api/me, GET /api/revisiones, GET /api/tipos-documento</li><li><code>/secretario/notificaciones</code> → <code>resources/views/secretario_unidad/Notificaciones.jsx</code> → GET /api/me, PUT /api/notificaciones/{id}</li><li><code>/secretario/oficiales</code> → <code>resources/views/secretario_unidad/OficialesEpi.jsx</code> → GET /api/cargos, GET /api/documentos, GET /api/grados, GET /api/me</li><li><code>/secretario/perfil</code> → <code>resources/views/secretario_unidad/Perfil.jsx</code> → POST /api/upload-foto</li><li><code>/secretario/plantillas</code> → <code>resources/views/secretario_unidad/Plantillas.jsx</code> → GET /api/plantillas, GET /api/plantillas/{id}/archivo</li><li><code>/secretario/reportes</code> → <code>resources/views/secretario_unidad/Reportes.jsx</code> [vía ReportesEngine.jsx: GET /api/reportes, GET /api/reportes/exportar]</li><li><code>/secretario/subir-documento</code> → <code>resources/views/secretario_unidad/SubirDocumento.jsx</code> → GET /api/estados-documento, GET /api/me, GET /api/sync/ping, GET /api/tipos-documento, POST /api/documentos, POST /api/documentos/preparar-envio, POST /api/upload-documento [vía revisionDocumento.js: POST /api/documentos/revisar-ia]</li><h2>API: ruta → Controlador@método</h2><h3>ArticuloController  (usa: Articulo)</h3><li>DELETE /api/articulos/{id} → <code>destroy()</code></li><li>GET /api/articulos/{id} → <code>show()</code></li><li>PUT /api/articulos/{id} → <code>update()</code></li><li>GET /api/articulos → <code>index()</code></li><li>POST /api/articulos → <code>store()</code></li><h3>AuditoriaController  (usa: Auditoria)</h3><li>DELETE /api/auditorias/{id} → <code>destroy()</code></li><li>GET /api/auditorias/{id} → <code>show()</code></li><li>PUT /api/auditorias/{id} → <code>update()</code></li><li>GET /api/auditorias → <code>index()</code>  ← Auditoria</li><li>POST /api/auditorias → <code>store()</code></li><h3>AuthController  (usa: Sesion, Usuario)</h3><li>POST /api/login → <code>login()</code>  ← Login, sesion-peticiones-tardias.test</li><li>POST /api/logout → <code>logout()</code>  ← AuthContext, sesion-peticiones-tardias.test</li><li>GET /api/me → <code>actual()</code>  ← AuthContext, Correcciones, Historial, MisDocumentos, Notificaciones, OficialesEpi, SubirDocumento, sesion-peticiones-tardias.test</li><h3>CargoController  (usa: Cargo)</h3><li>DELETE /api/cargos/{id} → <code>destroy()</code></li><li>GET /api/cargos/{id} → <code>show()</code></li><li>PUT /api/cargos/{id} → <code>update()</code></li><li>GET /api/cargos → <code>index()</code>  ← OficialesEpi</li><li>POST /api/cargos → <code>store()</code></li><h3>CatalogoController  (usa: CargoController, ComandoDepartamentalController, EpiController, EstadoDocumentoController, GradoController, RolController, TipoDocumentoController, TipoObservacionController)</h3><li>GET /api/catalogos → <code>index()</code></li><h3>ComandoDepartamentalController  (usa: ComandoDepartamental)</h3><li>DELETE /api/comando-departamental/{id} → <code>destroy()</code></li><li>GET /api/comando-departamental/{id} → <code>show()</code></li><li>PUT /api/comando-departamental/{id} → <code>update()</code></li><li>GET /api/comando-departamental → <code>index()</code></li><li>POST /api/comando-departamental → <code>store()</code></li><h3>ConfiguracionController  (usa: Configuracion)</h3><li>DELETE /api/configuraciones/{id} → <code>destroy()</code></li><li>GET /api/configuraciones/{id} → <code>show()</code></li><li>PUT /api/configuraciones/{id} → <code>update()</code></li><li>GET /api/configuraciones → <code>index()</code></li><li>POST /api/configuraciones → <code>store()</code></li><h3>ConfirmacionEnvioController</h3><li>POST /api/documentos/preparar-envio → <code>preparar()</code>  ← SubirDocumento</li><li>POST /api/documentos/{id}/preparar-subsanacion → <code>prepararSubsanacion()</code>  ← Correcciones</li><li>POST /api/documentos/{id}/subsanar → <code>subsanar()</code>  ← Correcciones</li><h3>DocumentoController  (usa: ConfirmacionEnvio, Documento, Epi, HistorialEstado, Oficial, TipoDocumento, Usuario, VerificadorIA, VersionDocumento)</h3><li>GET /api/archivos/documento → <code>archivoPorRuta()</code></li><li>GET /api/desempenio-epis → <code>desempenioEpis()</code>  ← DesempenioEpisPanel</li><li>POST /api/documentos/revisar-ia → <code>revisarIA()</code>  ← carga-archivos.test, revisionDocumento</li><li>GET /api/documentos/{id}/archivo → <code>archivo()</code></li><li>GET /api/documentos/{id}/trazabilidad → <code>trazabilidad()</code>  ← RecorridoInstitucional</li><li>DELETE /api/documentos/{id} → <code>destroy()</code></li><li>GET /api/documentos/{id} → <code>show()</code>  ← Correcciones, DocumentosAprobados, RevisarDocumentos</li><li>PUT /api/documentos/{id} → <code>update()</code>  ← DocumentosAprobados, RevisarDocumentos</li><li>GET /api/documentos → <code>index()</code>  ← DocumentosAprobados, DocumentosPorEpi, Historial, Observaciones, OficialesEpi, RecorridoInstitucional, RegistroDocumental, RevisarDocumentos, api, sesion-peticiones-tardias.test</li><li>POST /api/documentos → <code>store()</code>  ← SubirDocumento, api</li><li>GET /api/estadisticas-generales → <code>estadisticasGenerales()</code></li><li>POST /api/upload-documento → <code>subirArchivo()</code>  ← Correcciones, SubirDocumento, carga-archivos.test</li><h3>EpiController  (usa: Epi)</h3><li>DELETE /api/epis/{id} → <code>destroy()</code></li><li>GET /api/epis/{id} → <code>show()</code></li><li>PUT /api/epis/{id} → <code>update()</code></li><li>GET /api/epis → <code>index()</code>  ← Auditoria, DirectorioInstitucional, DocumentosAprobados, DocumentosPorEpi, GestionSecretarios, GestionUsuarios, Historial, Observaciones, RecorridoInstitucional, RegistroDocumental, RegistroOficialesIA, RevisarDocumentos</li><li>POST /api/epis → <code>store()</code></li><h3>EstadoDocumentoController  (usa: EstadoDocumento)</h3><li>DELETE /api/estados-documento/{id} → <code>destroy()</code></li><li>GET /api/estados-documento/{id} → <code>show()</code></li><li>PUT /api/estados-documento/{id} → <code>update()</code></li><li>GET /api/estados-documento → <code>index()</code>  ← DocumentosAprobados, MisDocumentos, RevisarDocumentos, SubirDocumento</li><li>POST /api/estados-documento → <code>store()</code></li><h3>FlujoDocumentoController  (usa: FlujoDocumento)</h3><li>DELETE /api/flujo-documentos/{id} → <code>destroy()</code></li><li>GET /api/flujo-documentos/{id} → <code>show()</code></li><li>PUT /api/flujo-documentos/{id} → <code>update()</code></li><li>GET /api/flujo-documentos → <code>index()</code></li><li>POST /api/flujo-documentos → <code>store()</code></li><h3>GradoController  (usa: Grado)</h3><li>DELETE /api/grados/{id} → <code>destroy()</code></li><li>GET /api/grados/{id} → <code>show()</code></li><li>PUT /api/grados/{id} → <code>update()</code></li><li>GET /api/grados → <code>index()</code>  ← DirectorioInstitucional, OficialesEpi</li><li>POST /api/grados → <code>store()</code></li><h3>HistorialDestinoController  (usa: HistorialDestino)</h3><li>DELETE /api/historial-destinos/{id} → <code>destroy()</code></li><li>GET /api/historial-destinos/{id} → <code>show()</code></li><li>PUT /api/historial-destinos/{id} → <code>update()</code></li><li>GET /api/historial-destinos → <code>index()</code></li><li>POST /api/historial-destinos → <code>store()</code></li><h3>HistorialEstadoController  (usa: HistorialEstado)</h3><li>DELETE /api/historial-estados/{id} → <code>destroy()</code></li><li>GET /api/historial-estados/{id} → <code>show()</code></li><li>PUT /api/historial-estados/{id} → <code>update()</code></li><li>GET /api/historial-estados → <code>index()</code>  ← Historial</li><li>POST /api/historial-estados → <code>store()</code></li><h3>MetricasController</h3><li>GET /api/metricas/reportes → <code>reportes()</code></li><h3>NormaController  (usa: Norma)</h3><li>DELETE /api/normas/{id} → <code>destroy()</code></li><li>GET /api/normas/{id} → <code>show()</code></li><li>PUT /api/normas/{id} → <code>update()</code></li><li>GET /api/normas → <code>index()</code></li><li>POST /api/normas → <code>store()</code></li><h3>NotificacionController  (usa: Notificacion)</h3><li>DELETE /api/notificaciones/{id} → <code>destroy()</code></li><li>GET /api/notificaciones/{id} → <code>show()</code></li><li>PUT /api/notificaciones/{id} → <code>update()</code>  ← Notificaciones</li><li>GET /api/notificaciones → <code>index()</code>  ← Dashboard, SidebarShell</li><li>POST /api/notificaciones → <code>store()</code>  ← DocumentosAprobados, RevisarDocumentos</li><h3>OficialController  (usa: Oficial)</h3><li>DELETE /api/oficiales/{id} → <code>destroy()</code></li><li>GET /api/oficiales/{id} → <code>show()</code></li><li>PUT /api/oficiales/{id} → <code>update()</code></li><li>GET /api/oficiales → <code>index()</code>  ← DirectorioInstitucional</li><li>POST /api/oficiales → <code>store()</code></li><h3>PanelController  (usa: Documento, Epi, TipoDocumento)</h3><li>GET /api/panel/departamental → <code>departamental()</code>  ← Dashboard</li><li>GET /api/panel/general → <code>general()</code>  ← Dashboard</li><li>GET /api/panel/unidad → <code>unidad()</code>  ← Dashboard</li><h3>PlantillaController  (usa: Plantilla)</h3><li>GET /api/plantillas/{id}/archivo → <code>archivo()</code>  ← Plantillas, sesion-peticiones-tardias.test</li><li>DELETE /api/plantillas/{id} → <code>destroy()</code></li><li>GET /api/plantillas/{id} → <code>show()</code></li><li>PUT /api/plantillas/{id} → <code>update()</code></li><li>GET /api/plantillas → <code>index()</code>  ← Plantillas</li><li>POST /api/plantillas → <code>store()</code></li><h3>RegistroLinkController  (usa: RegistroLink)</h3><li>GET /api/registro-links/publico/{token} → <code>publico()</code>  ← RegistroOficial</li><li>POST /api/registro-links/{id}/cancelar → <code>cancelar()</code>  ← RegistroOficialesIA</li><li>GET /api/registro-links → <code>index()</code>  ← RegistroOficialesIA</li><li>POST /api/registro-links → <code>store()</code>  ← RegistroOficialesIA</li><h3>ReglaController  (usa: Regla)</h3><li>DELETE /api/reglas/{id} → <code>destroy()</code></li><li>GET /api/reglas/{id} → <code>show()</code></li><li>PUT /api/reglas/{id} → <code>update()</code></li><li>GET /api/reglas → <code>index()</code></li><li>POST /api/reglas → <code>store()</code></li><h3>ReporteInstitucionalController</h3><li>GET /api/reportes/exportar → <code>exportar()</code>  ← ReportesEngine</li><li>GET /api/reportes → <code>index()</code>  ← ReportesEngine</li><h3>RevisionController  (usa: Revision)</h3><li>DELETE /api/revisiones/{id} → <code>destroy()</code></li><li>GET /api/revisiones/{id} → <code>show()</code></li><li>PUT /api/revisiones/{id} → <code>update()</code></li><li>GET /api/revisiones → <code>index()</code>  ← DocumentosAprobados, MisDocumentos, Observaciones</li><li>POST /api/revisiones → <code>store()</code>  ← DocumentosAprobados, RevisarDocumentos</li><h3>RolController  (usa: Rol)</h3><li>DELETE /api/roles/{id} → <code>destroy()</code></li><li>GET /api/roles/{id} → <code>show()</code></li><li>PUT /api/roles/{id} → <code>update()</code></li><li>GET /api/roles → <code>index()</code>  ← GestionUsuarios, RegistroOficialesIA</li><li>POST /api/roles → <code>store()</code></li><h3>SesionController  (usa: Sesion)</h3><li>DELETE /api/sesiones/{id} → <code>destroy()</code></li><li>GET /api/sesiones/{id} → <code>show()</code></li><li>PUT /api/sesiones/{id} → <code>update()</code></li><li>GET /api/sesiones → <code>index()</code></li><li>POST /api/sesiones → <code>store()</code></li><h3>SincronizacionController  (usa: Documento, SolicitudRegistro)</h3><li>GET /api/sync/estado → <code>estado()</code>  ← sesion-peticiones-tardias.test, useSincronizacion</li><li>GET /api/sync/ping → <code>ping()</code>  ← Correcciones, SubirDocumento</li><h3>SolicitudRegistroController  (usa: ArchivosRegistro, Auditoria, RegistroLink, SolicitudRegistro, Usuario, VerificacionRegistro, VerificadorIA)</h3><li>POST /api/registro-publico/{token} → <code>registrarPublico()</code>  ← RegistroOficial</li><li>POST /api/solicitudes-registro/{id}/adjuntos → <code>actualizarAdjuntos()</code>  ← RegistroOficialesIA</li><li>POST /api/solicitudes-registro/{id}/aprobar → <code>aprobar()</code>  ← RegistroOficialesIA</li><li>GET /api/solicitudes-registro/{id}/archivo/{tipo} → <code>archivo()</code></li><li>POST /api/solicitudes-registro/{id}/rechazar → <code>rechazar()</code>  ← RegistroOficialesIA</li><li>POST /api/solicitudes-registro/{id}/verificar-ia → <code>verificarIA()</code>  ← RegistroOficialesIA</li><li>GET /api/solicitudes-registro/{id} → <code>show()</code>  ← RegistroOficialesIA</li><li>GET /api/solicitudes-registro → <code>index()</code>  ← RegistroOficialesIA</li><h3>SugerenciaTipoController</h3><li>POST /api/tipos-memo/sugerencias/decision → <code>decidir()</code>  ← SugerenciasTipos</li><h3>TipoDocumentoController  (usa: TipoDocumento, TipoMemo)</h3><li>DELETE /api/tipos-documento/{id} → <code>destroy()</code></li><li>GET /api/tipos-documento/{id} → <code>show()</code></li><li>PUT /api/tipos-documento/{id} → <code>update()</code></li><li>GET /api/tipos-documento → <code>index()</code>  ← DocumentosAprobados, MisDocumentos, RegistroDocumental, RevisarDocumentos, SubirDocumento</li><li>POST /api/tipos-documento → <code>store()</code></li><h3>TipoMemoController  (usa: Auditoria, Documento, SugerenciasTipos, TipoDocumento, TipoMemo)</h3><li>DELETE /api/tipos-memo/{id} → <code>destroy()</code>  ← GestionTiposMemo</li><li>GET /api/tipos-memo/{id} → <code>show()</code></li><li>PUT /api/tipos-memo/{id} → <code>update()</code>  ← GestionTiposMemo</li><li>GET /api/tipos-memo → <code>index()</code>  ← GestionTiposMemo</li><li>POST /api/tipos-memo → <code>store()</code>  ← GestionTiposMemo</li><h3>TipoObservacionController  (usa: TipoObservacion)</h3><li>DELETE /api/tipos-observacion/{id} → <code>destroy()</code></li><li>GET /api/tipos-observacion/{id} → <code>show()</code></li><li>PUT /api/tipos-observacion/{id} → <code>update()</code></li><li>GET /api/tipos-observacion → <code>index()</code>  ← RevisarDocumentos</li><li>POST /api/tipos-observacion → <code>store()</code></li><h3>UsuarioController  (usa: Oficial, Usuario)</h3><li>GET /api/fotos → <code>foto()</code></li><li>POST /api/upload-foto → <code>subirFoto()</code>  ← Perfil</li><li>POST /api/usuarios/{id}/reset-password → <code>resetPassword()</code>  ← GestionSecretarios</li><li>DELETE /api/usuarios/{id} → <code>destroy()</code></li><li>GET /api/usuarios/{id} → <code>show()</code></li><li>PUT /api/usuarios/{id} → <code>update()</code>  ← GestionSecretarios, GestionUsuarios</li><li>GET /api/usuarios → <code>index()</code>  ← GestionSecretarios, GestionUsuarios</li><li>POST /api/usuarios → <code>store()</code>  ← GestionSecretarios, GestionUsuarios</li><h3>ValidacionController  (usa: Validacion)</h3><li>DELETE /api/validaciones/{id} → <code>destroy()</code></li><li>GET /api/validaciones/{id} → <code>show()</code></li><li>PUT /api/validaciones/{id} → <code>update()</code></li><li>GET /api/validaciones → <code>index()</code></li><li>POST /api/validaciones → <code>store()</code></li><h3>VersionDocumentoController  (usa: VersionDocumento)</h3><li>DELETE /api/versiones-documento/{id} → <code>destroy()</code></li><li>GET /api/versiones-documento/{id} → <code>show()</code></li><li>PUT /api/versiones-documento/{id} → <code>update()</code></li><li>GET /api/versiones-documento → <code>index()</code></li><li>POST /api/versiones-documento → <code>store()</code></li><h2>Modelos Eloquent → tabla y relaciones</h2><li><b>Articulo</b> (<code>articulos</code>): belongsTo Norma; hasMany Regla</li><li><b>Auditoria</b> (<code>auditoria</code>): belongsTo Usuario</li><li><b>Cargo</b> (<code>cargos</code>): hasMany Oficial</li><li><b>ComandoDepartamental</b> (<code>comando_departamental</code>): hasMany Epi</li><li><b>Configuracion</b> (<code>configuracion</code>)</li><li><b>Documento</b> (<code>documentos</code>): belongsTo TipoDocumento; belongsTo Oficial; belongsTo Usuario; belongsTo Epi; belongsTo EstadoDocumento; hasMany VersionDocumento; hasMany Revision; hasMany Validacion; hasMany FlujoDocumento; hasMany HistorialEstado; hasMany Notificacion</li><li><b>Epi</b> (<code>epis</code>): belongsTo ComandoDepartamental; hasMany Usuario; hasMany Oficial; hasMany HistorialDestino; hasMany Documento; hasMany FlujoDocumento</li><li><b>EstadoDocumento</b> (<code>estados_documento</code>): hasMany Documento</li><li><b>FlujoDocumento</b> (<code>flujo_documentos</code>): belongsTo Documento; belongsTo Usuario</li><li><b>Grado</b> (<code>grados</code>): hasMany Oficial</li><li><b>HistorialDestino</b> (<code>historial_destinos</code>): belongsTo Oficial; belongsTo Epi</li><li><b>HistorialEstado</b> (<code>historial_estados</code>): belongsTo Documento; belongsTo EstadoDocumento; belongsTo Usuario</li><li><b>Norma</b> (<code>normas</code>): hasMany Articulo</li><li><b>Notificacion</b> (<code>notificaciones</code>): belongsTo Usuario; belongsTo Documento</li><li><b>Oficial</b> (<code>oficiales</code>): belongsTo Grado; belongsTo Epi; belongsTo Cargo; hasMany HistorialDestino; hasMany Documento</li><li><b>Plantilla</b> (<code>plantillas</code>): belongsTo TipoDocumento</li><li><b>RegistroLink</b> (<code>links_registro</code>): belongsTo Rol; belongsTo Epi; belongsTo Usuario; hasMany SolicitudRegistro</li><li><b>Regla</b> (<code>reglas</code>): belongsTo Articulo; belongsTo TipoDocumento; hasMany Validacion</li><li><b>Revision</b> (<code>revisiones</code>): belongsTo Documento; belongsTo Usuario; belongsTo TipoObservacion</li><li><b>Rol</b> (<code>roles</code>): hasMany Usuario</li><li><b>Sesion</b> (<code>sesiones</code>): belongsTo Usuario</li><li><b>SolicitudRegistro</b> (<code>solicitudes_registro</code>): belongsTo RegistroLink; belongsTo Rol; belongsTo Epi; belongsTo Usuario</li><li><b>TipoDocumento</b> (<code>tipos_documento</code>): hasMany Plantilla; hasMany Documento; hasMany Regla</li><li><b>TipoMemo</b> (<code>tipos_memo</code>): belongsTo TipoDocumento; belongsTo Usuario</li><li><b>TipoObservacion</b> (<code>tipos_observacion</code>): hasMany Revision</li><li><b>Usuario</b> (<code>usuarios</code>): belongsTo Rol; belongsTo Epi; hasMany Sesion; hasMany Auditoria; hasMany Plantilla; hasMany Documento; hasMany VersionDocumento; hasMany Revision; hasMany FlujoDocumento; hasMany HistorialEstado; hasMany Notificacion</li><li><b>Validacion</b> (<code>validaciones</code>): belongsTo Documento; belongsTo Regla</li><li><b>VersionDocumento</b> (<code>versiones_documento</code>): belongsTo Documento; belongsTo Usuario</li><li><b>tabla: articulos</b></li><li><b>tabla: auditoria</b></li><li><b>tabla: cargos</b></li><li><b>tabla: comando_departamental</b></li><li><b>tabla: configuracion</b></li><li><b>tabla: documentos</b></li><li><b>tabla: epis</b></li><li><b>tabla: estados_documento</b></li><li><b>tabla: flujo_documentos</b></li><li><b>tabla: grados</b></li><li><b>tabla: historial_destinos</b></li><li><b>tabla: historial_estados</b></li><li><b>tabla: links_registro</b></li><li><b>tabla: normas</b></li><li><b>tabla: notificaciones</b></li><li><b>tabla: oficiales</b></li><li><b>tabla: plantillas</b></li><li><b>tabla: reglas</b></li><li><b>tabla: revisiones</b></li><li><b>tabla: roles</b></li><li><b>tabla: sesiones</b></li><li><b>tabla: solicitudes_registro</b></li><li><b>tabla: tipos_documento</b></li><li><b>tabla: tipos_memo</b></li><li><b>tabla: tipos_observacion</b></li><li><b>tabla: usuarios</b></li><li><b>tabla: validaciones</b></li><li><b>tabla: versiones_documento</b></li><h2>Servicios (app/Services) → quién los usa</h2><li><b>ArchivosRegistro</b> (2 métodos) ← SolicitudRegistroController</li><li><b>ColaVerificacionIA</b> (5 métodos) ← —</li><li><b>ConfirmacionEnvio</b> (4 métodos) ← DocumentoController, SubsanacionDocumento, SugerenciasTipos</li><li><b>PdfPaginas</b> (9 métodos) ← —</li><li><b>ReportesInstitucionales</b> (7 métodos) ← verificar-descargas.php</li><li><b>SubsanacionDocumento</b> (4 métodos) ← verificar-seguridad.php</li><li><b>SugerenciasTipos</b> (2 métodos) ← TipoMemoController</li><li><b>VerificacionRegistro</b> (2 métodos) ← ColaVerificacionIA, SolicitudRegistroController</li><li><b>VerificadorIA</b> (46 métodos) ← DocumentoController, SolicitudRegistroController</li><li><b>tabla: decisiones_tipos_libres</b> (0 métodos) ← —</li><li><b>tabla: documentos as d</b> (0 métodos) ← —</li><li><b>tabla: revisiones as r</b> (0 métodos) ← —</li><h2>Librerías frontend más usadas (importadas por)</h2><li><code>resources/js/lib/api.js</code> ← 39 archivos</li><li><code>resources/js/context/AuthContext.jsx</code> ← 31 archivos</li><li><code>resources/js/components/ui/Alert.jsx</code> ← 29 archivos</li><li><code>resources/js/components/ui/Spinner.jsx</code> ← 27 archivos</li><li><code>resources/js/components/ui/Graficos.jsx</code> ← 25 archivos</li><li><code>resources/js/components/ui/CargandoLista.jsx</code> ← 18 archivos</li><li><code>resources/js/components/LayoutComandoGeneral.jsx</code> ← 16 archivos</li><li><code>resources/js/components/ui/Modal.jsx</code> ← 15 archivos</li><li><code>resources/js/components/ui/EstadoBadge.jsx</code> ← 13 archivos</li><li><code>resources/js/components/LayoutComandoDepartamental.jsx</code> ← 12 archivos</li><li><code>resources/js/components/ui/ToastEnVivo.jsx</code> ← 12 archivos</li><li><code>resources/js/components/LayoutSecretario.jsx</code> ← 11 archivos</li><li><code>resources/js/components/ui/Panel.jsx</code> ← 11 archivos</li><li><code>resources/js/lib/useListaProgresiva.js</code> ← 7 archivos</li><li><code>resources/js/components/ui/MasResultados.jsx</code> ← 7 archivos</li><li><code>resources/js/components/ui/AvatarFoto.jsx</code> ← 6 archivos</li><li><code>resources/js/constants/navegacion.js</code> ← 5 archivos</li><li><code>resources/js/constants/ofbol.js</code> ← 5 archivos</li><li><code>resources/js/components/ui/Escudo.jsx</code> ← 5 archivos</li><li><code>resources/js/components/ui/ConfirmDialog.jsx</code> ← 5 archivos</li><h2>Nodos centrales (god nodes de Graphify) (most connected - your core abstractions)
+1. <code>VerificadorIA</code> - 54 edges
+2. <code>Documento</code> - 52 edges
+3. <code>Usuario</code> - 51 edges
+4. <code>Controller</code> - 37 edges
+5. <code>Epi</code> - 29 edges
+6. <code>SolicitudRegistroController</code> - 29 edges
+7. <code>DocumentoController</code> - 28 edges
+8. <code>Oficial</code> - 25 edges
+9. <code>SolicitudRegistro</code> - 23 edges
+10. <code>TipoDocumento</code> - 22 edges</h2><h2>Cambios recientes</h2><h3>2026-11-12 · Mejora visual y velocidad (respaldo: <code>.claude/backups/2026-11-12-mejora-visual/</code>)
+- Diagnóstico: cada petición a Laravel tardaba 550–650 ms porque el servidor del puerto 8000 corría sin OPcache, y atendía las peticiones de una en una. La solución es usar <code>scripts/iniciar-servidor.ps1 -Port 8000</code>.
+- <code>GET /api/catalogos</code> (CatalogoController): devuelve juntos epis, tipos-documento, estados-documento, tipos-observacion, grados, cargos, roles y comando-departamental. <code>api.js</code> lo usa al pedir cualquiera de ellos y vuelve a las rutas propias si responde 404.
+- <code>GET /api/documentos?resumen=1</code> ahora incluye <code>hash</code> y <code>versiones_count</code>. Las listas de Revisión, Aprobados, Registro, Documentos por EPI, Observaciones, Mis documentos y Subir documento usan resumen; el detalle se pide con <code>/documentos/{id}</code>.
+- <code>GET /api/revisiones?sin_documento=1</code>: no incluye el expediente completo en cada revisión. Lo usa Observaciones, que además calcula la última revisión con un Map.
+- Listas largas por tramos de 60 (<code>useListaProgresiva</code> + <code>MasResultados</code>) en ambos Historiales, Revisión, Aprobados, Registro, Observaciones y Auditoría. Todos los datos siguen accesibles.
+- Las cargas de listados muestran el esqueleto <code>CargandoLista</code> en vez del spinner (19 pantallas).
+- El sondeo del modo en vivo (<code>useSincronizacion</code>) cede su turno mientras haya peticiones de pantalla en curso (<code>api.ocupado()</code>).
+- Dashboard del Comando Departamental reorganizado: la tabla de recientes ocupa todo el ancho y suma la columna Referencia; Cruce por EPI comparte fila con Accesos rápidos; Reglas del dictamen es una franja de 3 columnas. Así no quedan huecos al bajar.
+- Dashboard del Comando General: la actividad por unidad muestra las 9 EPIs (antes 7).
+- CSS: superficies heredadas alineadas con <code>.ofbol-card</code>, ancho de 1440 px en pantallas grandes, celdas de nombre con ancho mínimo, <code>.ofbol-enlace-accion</code>, <code>.ofbol-btn-fila</code>, hover de accesos rápidos y esqueleto con respiración (respeta reduced-motion).
+
+### 2026-11-12 · Portada y login (respaldo: <code>.claude/backups/2026-11-12-portada-login/</code>)
+- Portada (<code>views/inicio/Inicio.jsx</code>): menos texto (sin la etiqueta superior, descripciones de una línea, características convertidas en chips). Espacios para fotografías reales en cada paso y una galería &quot;Al servicio de La Paz&quot;. Las fotos se configuran en <code>js/components/landing/fotosInicio.js</code> y se guardan en <code>public/images/inicio/</code> (ver LEEME.txt). Si falta una foto, su espacio no aparece.
+- Login (<code>views/login/Login.jsx</code>): botón &quot;Volver a la página inicial&quot; arriba a la izquierda (<code>.pb-login-volver</code> en login-characters.css). Se quitó el enlace &quot;← Página principal&quot; que estaba dentro de la tarjeta.
+- Verificado en vivo tras el build: el Panel Departamental quedó sin huecos (Cruce y Accesos a 413 px de alto cada uno; la tabla sin desbordar a 1600 px). Historial: de 27.821 a 1.615 elementos en pantalla.
+
+### 2026-11-12 · Ajuste de tablas detectado al capturar el informe
+- <code>app.css</code>: las tablas de 8 o más columnas (Cola de Revisión, bandejas) usan celdas de 12 px de relleno horizontal, para que la columna de acciones no quede cortada a 1600 px. Ancho mínimo de las celdas con nombre: 9rem.
+- <code>GestionUsuarios.jsx</code>: los correos largos pueden partirse (<code>[overflow-wrap:anywhere]</code>), para que el botón &quot;Desactivar&quot; no quede fuera de la tabla. Requiere <code>npm run build</code>.</h3><h2>Cómo usar este mapa</h2><li>Antes de editar algo, ubica la pantalla → endpoint → controlador → modelo/tabla en este mapa.</li><li>Para detalle, consulta <code>graphify-out/graph.json</code> (con Graphify instalado: <code>graphify query &quot;...&quot;</code>, <code>graphify path A B</code>, <code>graphify explain X</code>).</li><li>Si el código cambia mucho, regenera el mapa y vuelve a enviarlo.</li>
+<script type="text/markdown" id="mapa-md"># OFBOL — Mapa del proyecto (generado con Graphify)
+
+Pega este archivo (o el HTML) al inicio de cada chat para que Claude tenga el contexto del proyecto.
+Fuente completa e interactiva: `graphify-out/graph.html`, `graphify-out/graph.json`, `graphify-out/GRAPH_REPORT.md`.
+
+## Stack
+- Backend: Laravel 13 (PHP 8.3) · `app/Http/Controllers` (36) · `app/Models` (28) · `app/Services` (9) · middleware `SesionActiva`, `PermisosInstitucionales`, `SecurityHeaders`
+- Frontend: React SPA (Vite) montada desde `resources/js/app.jsx`; vistas en `resources/views/&lt;rol&gt;/*.jsx`; cliente HTTP `resources/js/lib/api.js` (base `/api`, CSRF por cookie XSRF)
+- `routes/web.php` sirve la SPA para cualquier ruta; toda la API vive en `routes/api.php` (rutas protegidas por sesión + permisos institucionales)
+- Roles: secretario_unidad (EPI) · secretario_comando_departamental · comando_general
+
+## Pantallas SPA → vista → endpoints que llama
+- `/` → `resources/views/inicio/Inicio.jsx`
+- `/comando-departamental/dashboard` → `resources/views/secretario_comando_departamental/Dashboard.jsx` → GET /api/panel/departamental
+- `/comando-departamental/desempenio` → `resources/views/secretario_comando_departamental/DesempenioEpis.jsx` [vía DesempenioEpisPanel.jsx: GET /api/desempenio-epis]
+- `/comando-departamental/documentos-epi` → `resources/views/secretario_comando_departamental/DocumentosPorEpi.jsx` → GET /api/documentos, GET /api/epis
+- `/comando-departamental/historial` → `resources/views/secretario_comando_departamental/Historial.jsx` → GET /api/documentos, GET /api/epis, GET /api/historial-estados
+- `/comando-departamental/notificaciones` → `resources/views/secretario_comando_departamental/Notificaciones.jsx` → GET /api/me, PUT /api/notificaciones/{id}
+- `/comando-departamental/observaciones` → `resources/views/secretario_comando_departamental/Observaciones.jsx` → GET /api/documentos, GET /api/epis, GET /api/revisiones
+- `/comando-departamental/perfil` → `resources/views/secretario_comando_departamental/Perfil.jsx`
+- `/comando-departamental/reportes` → `resources/views/secretario_comando_departamental/Reportes.jsx` [vía ReportesEngine.jsx: GET /api/reportes, GET /api/reportes/exportar]
+- `/comando-departamental/revision` → `resources/views/secretario_comando_departamental/RevisarDocumentos.jsx` → GET /api/documentos, GET /api/documentos/{id}, GET /api/epis, GET /api/estados-documento, GET /api/tipos-documento, GET /api/tipos-observacion, POST /api/notificaciones, POST /api/revisiones, PUT /api/documentos/{id}
+- `/comando-departamental/secretarios` → `resources/views/secretario_comando_departamental/GestionSecretarios.jsx` → GET /api/epis, GET /api/usuarios, POST /api/usuarios, POST /api/usuarios/{id}/reset-password, PUT /api/usuarios/{id}
+- `/comando-departamental/trazabilidad` → `resources/views/secretario_comando_departamental/Trazabilidad.jsx` [vía RecorridoInstitucional.jsx: GET /api/documentos, GET /api/documentos/{id}/trazabilidad, GET /api/epis]
+- `/comando-general/auditoria` → `resources/views/comando_general/Auditoria.jsx` → GET /api/auditorias, GET /api/epis
+- `/comando-general/comparativo` → `resources/views/comando_general/ComparativoGeneral.jsx` [vía DesempenioEpisPanel.jsx: GET /api/desempenio-epis]
+- `/comando-general/dashboard` → `resources/views/comando_general/Dashboard.jsx` → GET /api/panel/general
+- `/comando-general/directorio` → `resources/views/comando_general/DirectorioInstitucional.jsx` → GET /api/epis, GET /api/grados, GET /api/oficiales
+- `/comando-general/documentos` → `resources/views/comando_general/DocumentosAprobados.jsx` → GET /api/documentos, GET /api/documentos/{id}, GET /api/epis, GET /api/estados-documento, GET /api/revisiones, GET /api/tipos-documento, POST /api/notificaciones, POST /api/revisiones, PUT /api/documentos/{id}
+- `/comando-general/historial` → `resources/views/comando_general/Historial.jsx` → GET /api/documentos, GET /api/epis
+- `/comando-general/notificaciones` → `resources/views/comando_general/Notificaciones.jsx` → GET /api/me, PUT /api/notificaciones/{id}
+- `/comando-general/perfil` → `resources/views/comando_general/Perfil.jsx`
+- `/comando-general/registro` → `resources/views/comando_general/RegistroDocumental.jsx` → GET /api/documentos, GET /api/epis, GET /api/tipos-documento
+- `/comando-general/registro-oficiales` → `resources/views/comando_general/RegistroOficialesIA.jsx` → GET /api/epis, GET /api/registro-links, GET /api/roles, GET /api/solicitudes-registro, GET /api/solicitudes-registro/{id}, POST /api/registro-links, POST /api/registro-links/{id}/cancelar, POST /api/solicitudes-registro/{id}/adjuntos, POST /api/solicitudes-registro/{id}/aprobar, POST /api/solicitudes-registro/{id}/rechazar, POST /api/solicitudes-registro/{id}/verificar-ia
+- `/comando-general/reportes` → `resources/views/comando_general/Reportes.jsx` [vía ReportesEngine.jsx: GET /api/reportes, GET /api/reportes/exportar]
+- `/comando-general/tipos-memo` → `resources/views/comando_general/GestionTiposMemo.jsx` → DELETE /api/tipos-memo/{id}, GET /api/tipos-memo, POST /api/tipos-memo, PUT /api/tipos-memo/{id} [vía SugerenciasTipos.jsx: POST /api/tipos-memo/sugerencias/decision]
+- `/comando-general/trazabilidad` → `resources/views/comando_general/Trazabilidad.jsx` [vía RecorridoInstitucional.jsx: GET /api/documentos, GET /api/documentos/{id}/trazabilidad, GET /api/epis]
+- `/comando-general/usuarios` → `resources/views/comando_general/GestionUsuarios.jsx` → GET /api/epis, GET /api/roles, GET /api/usuarios, POST /api/usuarios, PUT /api/usuarios/{id}
+- `/login` → `resources/views/login/Login.jsx` → POST /api/login [vía Auditoria.jsx: GET /api/auditorias, GET /api/epis; vía Correcciones.jsx: GET /api/documentos/{id}, GET /api/me, GET /api/sync/ping, POST /api/documentos/{id}/preparar-subsanacion, POST /api/documentos/{id}/subsanar, POST /api/upload-documento; vía Dashboard.jsx: GET /api/notificaciones, GET /api/panel/departamental, GET /api/panel/general, GET /api/panel/unidad; vía DirectorioInstitucional.jsx: GET /api/epis, GET /api/grados, GET /api/oficiales; vía DocumentosAprobados.jsx: GET /api/documentos, GET /api/documentos/{id}, GET /api/epis, GET /api/estados-documento, GET /api/revisiones, GET /api/tipos-documento, POST /api/notificaciones, POST /api/revisiones, PUT /api/documentos/{id}; vía DocumentosPorEpi.jsx: GET /api/documentos, GET /api/epis; vía GestionSecretarios.jsx: GET /api/epis, GET /api/usuarios, POST /api/usuarios, POST /api/usuarios/{id}/reset-password, PUT /api/usuarios/{id}; vía GestionTiposMemo.jsx: DELETE /api/tipos-memo/{id}, GET /api/tipos-memo, POST /api/tipos-memo, PUT /api/tipos-memo/{id}; vía GestionUsuarios.jsx: GET /api/epis, GET /api/roles, GET /api/usuarios, POST /api/usuarios, PUT /api/usuarios/{id}; vía Historial.jsx: GET /api/documentos, GET /api/epis, GET /api/historial-estados, GET /api/me; vía MisDocumentos.jsx: GET /api/estados-documento, GET /api/me, GET /api/revisiones, GET /api/tipos-documento; vía Notificaciones.jsx: GET /api/me, PUT /api/notificaciones/{id}; vía Observaciones.jsx: GET /api/documentos, GET /api/epis, GET /api/revisiones; vía OficialesEpi.jsx: GET /api/cargos, GET /api/documentos, GET /api/grados, GET /api/me; vía Perfil.jsx: POST /api/upload-foto; vía Plantillas.jsx: GET /api/plantillas, GET /api/plantillas/{id}/archivo; vía RegistroDocumental.jsx: GET /api/documentos, GET /api/epis, GET /api/tipos-documento; vía RegistroOficialesIA.jsx: GET /api/epis, GET /api/registro-links, GET /api/roles, GET /api/solicitudes-registro, GET /api/solicitudes-registro/{id}, POST /api/registro-links, POST /api/registro-links/{id}/cancelar, POST /api/solicitudes-registro/{id}/adjuntos, POST /api/solicitudes-registro/{id}/aprobar, POST /api/solicitudes-registro/{id}/rechazar, POST /api/solicitudes-registro/{id}/verificar-ia; vía RevisarDocumentos.jsx: GET /api/documentos, GET /api/documentos/{id}, GET /api/epis, GET /api/estados-documento, GET /api/tipos-documento, GET /api/tipos-observacion, POST /api/notificaciones, POST /api/revisiones, PUT /api/documentos/{id}; vía SubirDocumento.jsx: GET /api/estados-documento, GET /api/me, GET /api/sync/ping, GET /api/tipos-documento, POST /api/documentos, POST /api/documentos/preparar-envio, POST /api/upload-documento]
+- `/registro-oficial/:token` → `resources/views/login/RegistroOficial.jsx` → GET /api/registro-links/publico/{token}, POST /api/registro-publico/{token}
+- `/secretario/correcciones` → `resources/views/secretario_unidad/Correcciones.jsx` → GET /api/documentos/{id}, GET /api/me, GET /api/sync/ping, POST /api/documentos/{id}/preparar-subsanacion, POST /api/documentos/{id}/subsanar, POST /api/upload-documento [vía revisionDocumento.js: POST /api/documentos/revisar-ia]
+- `/secretario/dashboard` → `resources/views/secretario_unidad/Dashboard.jsx` → GET /api/notificaciones, GET /api/panel/unidad
+- `/secretario/historial` → `resources/views/secretario_unidad/Historial.jsx` → GET /api/historial-estados, GET /api/me
+- `/secretario/mis-documentos` → `resources/views/secretario_unidad/MisDocumentos.jsx` → GET /api/estados-documento, GET /api/me, GET /api/revisiones, GET /api/tipos-documento
+- `/secretario/notificaciones` → `resources/views/secretario_unidad/Notificaciones.jsx` → GET /api/me, PUT /api/notificaciones/{id}
+- `/secretario/oficiales` → `resources/views/secretario_unidad/OficialesEpi.jsx` → GET /api/cargos, GET /api/documentos, GET /api/grados, GET /api/me
+- `/secretario/perfil` → `resources/views/secretario_unidad/Perfil.jsx` → POST /api/upload-foto
+- `/secretario/plantillas` → `resources/views/secretario_unidad/Plantillas.jsx` → GET /api/plantillas, GET /api/plantillas/{id}/archivo
+- `/secretario/reportes` → `resources/views/secretario_unidad/Reportes.jsx` [vía ReportesEngine.jsx: GET /api/reportes, GET /api/reportes/exportar]
+- `/secretario/subir-documento` → `resources/views/secretario_unidad/SubirDocumento.jsx` → GET /api/estados-documento, GET /api/me, GET /api/sync/ping, GET /api/tipos-documento, POST /api/documentos, POST /api/documentos/preparar-envio, POST /api/upload-documento [vía revisionDocumento.js: POST /api/documentos/revisar-ia]
+
+## API: ruta → Controlador@método
+### ArticuloController  (usa: Articulo)
+- DELETE /api/articulos/{id} → `destroy()`
+- GET /api/articulos/{id} → `show()`
+- PUT /api/articulos/{id} → `update()`
+- GET /api/articulos → `index()`
+- POST /api/articulos → `store()`
+### AuditoriaController  (usa: Auditoria)
+- DELETE /api/auditorias/{id} → `destroy()`
+- GET /api/auditorias/{id} → `show()`
+- PUT /api/auditorias/{id} → `update()`
+- GET /api/auditorias → `index()`  ← Auditoria
+- POST /api/auditorias → `store()`
+### AuthController  (usa: Sesion, Usuario)
+- POST /api/login → `login()`  ← Login, sesion-peticiones-tardias.test
+- POST /api/logout → `logout()`  ← AuthContext, sesion-peticiones-tardias.test
+- GET /api/me → `actual()`  ← AuthContext, Correcciones, Historial, MisDocumentos, Notificaciones, OficialesEpi, SubirDocumento, sesion-peticiones-tardias.test
+### CargoController  (usa: Cargo)
+- DELETE /api/cargos/{id} → `destroy()`
+- GET /api/cargos/{id} → `show()`
+- PUT /api/cargos/{id} → `update()`
+- GET /api/cargos → `index()`  ← OficialesEpi
+- POST /api/cargos → `store()`
+### CatalogoController  (usa: CargoController, ComandoDepartamentalController, EpiController, EstadoDocumentoController, GradoController, RolController, TipoDocumentoController, TipoObservacionController)
+- GET /api/catalogos → `index()`
+### ComandoDepartamentalController  (usa: ComandoDepartamental)
+- DELETE /api/comando-departamental/{id} → `destroy()`
+- GET /api/comando-departamental/{id} → `show()`
+- PUT /api/comando-departamental/{id} → `update()`
+- GET /api/comando-departamental → `index()`
+- POST /api/comando-departamental → `store()`
+### ConfiguracionController  (usa: Configuracion)
+- DELETE /api/configuraciones/{id} → `destroy()`
+- GET /api/configuraciones/{id} → `show()`
+- PUT /api/configuraciones/{id} → `update()`
+- GET /api/configuraciones → `index()`
+- POST /api/configuraciones → `store()`
+### ConfirmacionEnvioController
+- POST /api/documentos/preparar-envio → `preparar()`  ← SubirDocumento
+- POST /api/documentos/{id}/preparar-subsanacion → `prepararSubsanacion()`  ← Correcciones
+- POST /api/documentos/{id}/subsanar → `subsanar()`  ← Correcciones
+### DocumentoController  (usa: ConfirmacionEnvio, Documento, Epi, HistorialEstado, Oficial, TipoDocumento, Usuario, VerificadorIA, VersionDocumento)
+- GET /api/archivos/documento → `archivoPorRuta()`
+- GET /api/desempenio-epis → `desempenioEpis()`  ← DesempenioEpisPanel
+- POST /api/documentos/revisar-ia → `revisarIA()`  ← carga-archivos.test, revisionDocumento
+- GET /api/documentos/{id}/archivo → `archivo()`
+- GET /api/documentos/{id}/trazabilidad → `trazabilidad()`  ← RecorridoInstitucional
+- DELETE /api/documentos/{id} → `destroy()`
+- GET /api/documentos/{id} → `show()`  ← Correcciones, DocumentosAprobados, RevisarDocumentos
+- PUT /api/documentos/{id} → `update()`  ← DocumentosAprobados, RevisarDocumentos
+- GET /api/documentos → `index()`  ← DocumentosAprobados, DocumentosPorEpi, Historial, Observaciones, OficialesEpi, RecorridoInstitucional, RegistroDocumental, RevisarDocumentos, api, sesion-peticiones-tardias.test
+- POST /api/documentos → `store()`  ← SubirDocumento, api
+- GET /api/estadisticas-generales → `estadisticasGenerales()`
+- POST /api/upload-documento → `subirArchivo()`  ← Correcciones, SubirDocumento, carga-archivos.test
+### EpiController  (usa: Epi)
+- DELETE /api/epis/{id} → `destroy()`
+- GET /api/epis/{id} → `show()`
+- PUT /api/epis/{id} → `update()`
+- GET /api/epis → `index()`  ← Auditoria, DirectorioInstitucional, DocumentosAprobados, DocumentosPorEpi, GestionSecretarios, GestionUsuarios, Historial, Observaciones, RecorridoInstitucional, RegistroDocumental, RegistroOficialesIA, RevisarDocumentos
+- POST /api/epis → `store()`
+### EstadoDocumentoController  (usa: EstadoDocumento)
+- DELETE /api/estados-documento/{id} → `destroy()`
+- GET /api/estados-documento/{id} → `show()`
+- PUT /api/estados-documento/{id} → `update()`
+- GET /api/estados-documento → `index()`  ← DocumentosAprobados, MisDocumentos, RevisarDocumentos, SubirDocumento
+- POST /api/estados-documento → `store()`
+### FlujoDocumentoController  (usa: FlujoDocumento)
+- DELETE /api/flujo-documentos/{id} → `destroy()`
+- GET /api/flujo-documentos/{id} → `show()`
+- PUT /api/flujo-documentos/{id} → `update()`
+- GET /api/flujo-documentos → `index()`
+- POST /api/flujo-documentos → `store()`
+### GradoController  (usa: Grado)
+- DELETE /api/grados/{id} → `destroy()`
+- GET /api/grados/{id} → `show()`
+- PUT /api/grados/{id} → `update()`
+- GET /api/grados → `index()`  ← DirectorioInstitucional, OficialesEpi
+- POST /api/grados → `store()`
+### HistorialDestinoController  (usa: HistorialDestino)
+- DELETE /api/historial-destinos/{id} → `destroy()`
+- GET /api/historial-destinos/{id} → `show()`
+- PUT /api/historial-destinos/{id} → `update()`
+- GET /api/historial-destinos → `index()`
+- POST /api/historial-destinos → `store()`
+### HistorialEstadoController  (usa: HistorialEstado)
+- DELETE /api/historial-estados/{id} → `destroy()`
+- GET /api/historial-estados/{id} → `show()`
+- PUT /api/historial-estados/{id} → `update()`
+- GET /api/historial-estados → `index()`  ← Historial
+- POST /api/historial-estados → `store()`
+### MetricasController
+- GET /api/metricas/reportes → `reportes()`
+### NormaController  (usa: Norma)
+- DELETE /api/normas/{id} → `destroy()`
+- GET /api/normas/{id} → `show()`
+- PUT /api/normas/{id} → `update()`
+- GET /api/normas → `index()`
+- POST /api/normas → `store()`
+### NotificacionController  (usa: Notificacion)
+- DELETE /api/notificaciones/{id} → `destroy()`
+- GET /api/notificaciones/{id} → `show()`
+- PUT /api/notificaciones/{id} → `update()`  ← Notificaciones
+- GET /api/notificaciones → `index()`  ← Dashboard, SidebarShell
+- POST /api/notificaciones → `store()`  ← DocumentosAprobados, RevisarDocumentos
+### OficialController  (usa: Oficial)
+- DELETE /api/oficiales/{id} → `destroy()`
+- GET /api/oficiales/{id} → `show()`
+- PUT /api/oficiales/{id} → `update()`
+- GET /api/oficiales → `index()`  ← DirectorioInstitucional
+- POST /api/oficiales → `store()`
+### PanelController  (usa: Documento, Epi, TipoDocumento)
+- GET /api/panel/departamental → `departamental()`  ← Dashboard
+- GET /api/panel/general → `general()`  ← Dashboard
+- GET /api/panel/unidad → `unidad()`  ← Dashboard
+### PlantillaController  (usa: Plantilla)
+- GET /api/plantillas/{id}/archivo → `archivo()`  ← Plantillas, sesion-peticiones-tardias.test
+- DELETE /api/plantillas/{id} → `destroy()`
+- GET /api/plantillas/{id} → `show()`
+- PUT /api/plantillas/{id} → `update()`
+- GET /api/plantillas → `index()`  ← Plantillas
+- POST /api/plantillas → `store()`
+### RegistroLinkController  (usa: RegistroLink)
+- GET /api/registro-links/publico/{token} → `publico()`  ← RegistroOficial
+- POST /api/registro-links/{id}/cancelar → `cancelar()`  ← RegistroOficialesIA
+- GET /api/registro-links → `index()`  ← RegistroOficialesIA
+- POST /api/registro-links → `store()`  ← RegistroOficialesIA
+### ReglaController  (usa: Regla)
+- DELETE /api/reglas/{id} → `destroy()`
+- GET /api/reglas/{id} → `show()`
+- PUT /api/reglas/{id} → `update()`
+- GET /api/reglas → `index()`
+- POST /api/reglas → `store()`
+### ReporteInstitucionalController
+- GET /api/reportes/exportar → `exportar()`  ← ReportesEngine
+- GET /api/reportes → `index()`  ← ReportesEngine
+### RevisionController  (usa: Revision)
+- DELETE /api/revisiones/{id} → `destroy()`
+- GET /api/revisiones/{id} → `show()`
+- PUT /api/revisiones/{id} → `update()`
+- GET /api/revisiones → `index()`  ← DocumentosAprobados, MisDocumentos, Observaciones
+- POST /api/revisiones → `store()`  ← DocumentosAprobados, RevisarDocumentos
+### RolController  (usa: Rol)
+- DELETE /api/roles/{id} → `destroy()`
+- GET /api/roles/{id} → `show()`
+- PUT /api/roles/{id} → `update()`
+- GET /api/roles → `index()`  ← GestionUsuarios, RegistroOficialesIA
+- POST /api/roles → `store()`
+### SesionController  (usa: Sesion)
+- DELETE /api/sesiones/{id} → `destroy()`
+- GET /api/sesiones/{id} → `show()`
+- PUT /api/sesiones/{id} → `update()`
+- GET /api/sesiones → `index()`
+- POST /api/sesiones → `store()`
+### SincronizacionController  (usa: Documento, SolicitudRegistro)
+- GET /api/sync/estado → `estado()`  ← sesion-peticiones-tardias.test, useSincronizacion
+- GET /api/sync/ping → `ping()`  ← Correcciones, SubirDocumento
+### SolicitudRegistroController  (usa: ArchivosRegistro, Auditoria, RegistroLink, SolicitudRegistro, Usuario, VerificacionRegistro, VerificadorIA)
+- POST /api/registro-publico/{token} → `registrarPublico()`  ← RegistroOficial
+- POST /api/solicitudes-registro/{id}/adjuntos → `actualizarAdjuntos()`  ← RegistroOficialesIA
+- POST /api/solicitudes-registro/{id}/aprobar → `aprobar()`  ← RegistroOficialesIA
+- GET /api/solicitudes-registro/{id}/archivo/{tipo} → `archivo()`
+- POST /api/solicitudes-registro/{id}/rechazar → `rechazar()`  ← RegistroOficialesIA
+- POST /api/solicitudes-registro/{id}/verificar-ia → `verificarIA()`  ← RegistroOficialesIA
+- GET /api/solicitudes-registro/{id} → `show()`  ← RegistroOficialesIA
+- GET /api/solicitudes-registro → `index()`  ← RegistroOficialesIA
+### SugerenciaTipoController
+- POST /api/tipos-memo/sugerencias/decision → `decidir()`  ← SugerenciasTipos
+### TipoDocumentoController  (usa: TipoDocumento, TipoMemo)
+- DELETE /api/tipos-documento/{id} → `destroy()`
+- GET /api/tipos-documento/{id} → `show()`
+- PUT /api/tipos-documento/{id} → `update()`
+- GET /api/tipos-documento → `index()`  ← DocumentosAprobados, MisDocumentos, RegistroDocumental, RevisarDocumentos, SubirDocumento
+- POST /api/tipos-documento → `store()`
+### TipoMemoController  (usa: Auditoria, Documento, SugerenciasTipos, TipoDocumento, TipoMemo)
+- DELETE /api/tipos-memo/{id} → `destroy()`  ← GestionTiposMemo
+- GET /api/tipos-memo/{id} → `show()`
+- PUT /api/tipos-memo/{id} → `update()`  ← GestionTiposMemo
+- GET /api/tipos-memo → `index()`  ← GestionTiposMemo
+- POST /api/tipos-memo → `store()`  ← GestionTiposMemo
+### TipoObservacionController  (usa: TipoObservacion)
+- DELETE /api/tipos-observacion/{id} → `destroy()`
+- GET /api/tipos-observacion/{id} → `show()`
+- PUT /api/tipos-observacion/{id} → `update()`
+- GET /api/tipos-observacion → `index()`  ← RevisarDocumentos
+- POST /api/tipos-observacion → `store()`
+### UsuarioController  (usa: Oficial, Usuario)
+- GET /api/fotos → `foto()`
+- POST /api/upload-foto → `subirFoto()`  ← Perfil
+- POST /api/usuarios/{id}/reset-password → `resetPassword()`  ← GestionSecretarios
+- DELETE /api/usuarios/{id} → `destroy()`
+- GET /api/usuarios/{id} → `show()`
+- PUT /api/usuarios/{id} → `update()`  ← GestionSecretarios, GestionUsuarios
+- GET /api/usuarios → `index()`  ← GestionSecretarios, GestionUsuarios
+- POST /api/usuarios → `store()`  ← GestionSecretarios, GestionUsuarios
+### ValidacionController  (usa: Validacion)
+- DELETE /api/validaciones/{id} → `destroy()`
+- GET /api/validaciones/{id} → `show()`
+- PUT /api/validaciones/{id} → `update()`
+- GET /api/validaciones → `index()`
+- POST /api/validaciones → `store()`
+### VersionDocumentoController  (usa: VersionDocumento)
+- DELETE /api/versiones-documento/{id} → `destroy()`
+- GET /api/versiones-documento/{id} → `show()`
+- PUT /api/versiones-documento/{id} → `update()`
+- GET /api/versiones-documento → `index()`
+- POST /api/versiones-documento → `store()`
+
+## Modelos Eloquent → tabla y relaciones
+- **Articulo** (`articulos`): belongsTo Norma; hasMany Regla
+- **Auditoria** (`auditoria`): belongsTo Usuario
+- **Cargo** (`cargos`): hasMany Oficial
+- **ComandoDepartamental** (`comando_departamental`): hasMany Epi
+- **Configuracion** (`configuracion`)
+- **Documento** (`documentos`): belongsTo TipoDocumento; belongsTo Oficial; belongsTo Usuario; belongsTo Epi; belongsTo EstadoDocumento; hasMany VersionDocumento; hasMany Revision; hasMany Validacion; hasMany FlujoDocumento; hasMany HistorialEstado; hasMany Notificacion
+- **Epi** (`epis`): belongsTo ComandoDepartamental; hasMany Usuario; hasMany Oficial; hasMany HistorialDestino; hasMany Documento; hasMany FlujoDocumento
+- **EstadoDocumento** (`estados_documento`): hasMany Documento
+- **FlujoDocumento** (`flujo_documentos`): belongsTo Documento; belongsTo Usuario
+- **Grado** (`grados`): hasMany Oficial
+- **HistorialDestino** (`historial_destinos`): belongsTo Oficial; belongsTo Epi
+- **HistorialEstado** (`historial_estados`): belongsTo Documento; belongsTo EstadoDocumento; belongsTo Usuario
+- **Norma** (`normas`): hasMany Articulo
+- **Notificacion** (`notificaciones`): belongsTo Usuario; belongsTo Documento
+- **Oficial** (`oficiales`): belongsTo Grado; belongsTo Epi; belongsTo Cargo; hasMany HistorialDestino; hasMany Documento
+- **Plantilla** (`plantillas`): belongsTo TipoDocumento
+- **RegistroLink** (`links_registro`): belongsTo Rol; belongsTo Epi; belongsTo Usuario; hasMany SolicitudRegistro
+- **Regla** (`reglas`): belongsTo Articulo; belongsTo TipoDocumento; hasMany Validacion
+- **Revision** (`revisiones`): belongsTo Documento; belongsTo Usuario; belongsTo TipoObservacion
+- **Rol** (`roles`): hasMany Usuario
+- **Sesion** (`sesiones`): belongsTo Usuario
+- **SolicitudRegistro** (`solicitudes_registro`): belongsTo RegistroLink; belongsTo Rol; belongsTo Epi; belongsTo Usuario
+- **TipoDocumento** (`tipos_documento`): hasMany Plantilla; hasMany Documento; hasMany Regla
+- **TipoMemo** (`tipos_memo`): belongsTo TipoDocumento; belongsTo Usuario
+- **TipoObservacion** (`tipos_observacion`): hasMany Revision
+- **Usuario** (`usuarios`): belongsTo Rol; belongsTo Epi; hasMany Sesion; hasMany Auditoria; hasMany Plantilla; hasMany Documento; hasMany VersionDocumento; hasMany Revision; hasMany FlujoDocumento; hasMany HistorialEstado; hasMany Notificacion
+- **Validacion** (`validaciones`): belongsTo Documento; belongsTo Regla
+- **VersionDocumento** (`versiones_documento`): belongsTo Documento; belongsTo Usuario
+- **tabla: articulos**
+- **tabla: auditoria**
+- **tabla: cargos**
+- **tabla: comando_departamental**
+- **tabla: configuracion**
+- **tabla: documentos**
+- **tabla: epis**
+- **tabla: estados_documento**
+- **tabla: flujo_documentos**
+- **tabla: grados**
+- **tabla: historial_destinos**
+- **tabla: historial_estados**
+- **tabla: links_registro**
+- **tabla: normas**
+- **tabla: notificaciones**
+- **tabla: oficiales**
+- **tabla: plantillas**
+- **tabla: reglas**
+- **tabla: revisiones**
+- **tabla: roles**
+- **tabla: sesiones**
+- **tabla: solicitudes_registro**
+- **tabla: tipos_documento**
+- **tabla: tipos_memo**
+- **tabla: tipos_observacion**
+- **tabla: usuarios**
+- **tabla: validaciones**
+- **tabla: versiones_documento**
+
+## Servicios (app/Services) → quién los usa
+- **ArchivosRegistro** (2 métodos) ← SolicitudRegistroController
+- **ColaVerificacionIA** (5 métodos) ← —
+- **ConfirmacionEnvio** (4 métodos) ← DocumentoController, SubsanacionDocumento, SugerenciasTipos
+- **PdfPaginas** (9 métodos) ← —
+- **ReportesInstitucionales** (7 métodos) ← verificar-descargas.php
+- **SubsanacionDocumento** (4 métodos) ← verificar-seguridad.php
+- **SugerenciasTipos** (2 métodos) ← TipoMemoController
+- **VerificacionRegistro** (2 métodos) ← ColaVerificacionIA, SolicitudRegistroController
+- **VerificadorIA** (46 métodos) ← DocumentoController, SolicitudRegistroController
+- **tabla: decisiones_tipos_libres** (0 métodos) ← —
+- **tabla: documentos as d** (0 métodos) ← —
+- **tabla: revisiones as r** (0 métodos) ← —
+
+## Librerías frontend más usadas (importadas por)
+- `resources/js/lib/api.js` ← 39 archivos
+- `resources/js/context/AuthContext.jsx` ← 31 archivos
+- `resources/js/components/ui/Alert.jsx` ← 29 archivos
+- `resources/js/components/ui/Spinner.jsx` ← 27 archivos
+- `resources/js/components/ui/Graficos.jsx` ← 25 archivos
+- `resources/js/components/ui/CargandoLista.jsx` ← 18 archivos
+- `resources/js/components/LayoutComandoGeneral.jsx` ← 16 archivos
+- `resources/js/components/ui/Modal.jsx` ← 15 archivos
+- `resources/js/components/ui/EstadoBadge.jsx` ← 13 archivos
+- `resources/js/components/LayoutComandoDepartamental.jsx` ← 12 archivos
+- `resources/js/components/ui/ToastEnVivo.jsx` ← 12 archivos
+- `resources/js/components/LayoutSecretario.jsx` ← 11 archivos
+- `resources/js/components/ui/Panel.jsx` ← 11 archivos
+- `resources/js/lib/useListaProgresiva.js` ← 7 archivos
+- `resources/js/components/ui/MasResultados.jsx` ← 7 archivos
+- `resources/js/components/ui/AvatarFoto.jsx` ← 6 archivos
+- `resources/js/constants/navegacion.js` ← 5 archivos
+- `resources/js/constants/ofbol.js` ← 5 archivos
+- `resources/js/components/ui/Escudo.jsx` ← 5 archivos
+- `resources/js/components/ui/ConfirmDialog.jsx` ← 5 archivos
+
+## Nodos centrales (god nodes de Graphify) (most connected - your core abstractions)
+1. `VerificadorIA` - 54 edges
+2. `Documento` - 52 edges
+3. `Usuario` - 51 edges
+4. `Controller` - 37 edges
+5. `Epi` - 29 edges
+6. `SolicitudRegistroController` - 29 edges
+7. `DocumentoController` - 28 edges
+8. `Oficial` - 25 edges
+9. `SolicitudRegistro` - 23 edges
+10. `TipoDocumento` - 22 edges
+
+## Cambios recientes
+### 2026-11-12 · Mejora visual y velocidad (respaldo: `.claude/backups/2026-11-12-mejora-visual/`)
+- Diagnóstico: cada petición a Laravel tardaba 550–650 ms porque el servidor del puerto 8000 corría sin OPcache, y atendía las peticiones de una en una. La solución es usar `scripts/iniciar-servidor.ps1 -Port 8000`.
+- `GET /api/catalogos` (CatalogoController): devuelve juntos epis, tipos-documento, estados-documento, tipos-observacion, grados, cargos, roles y comando-departamental. `api.js` lo usa al pedir cualquiera de ellos y vuelve a las rutas propias si responde 404.
+- `GET /api/documentos?resumen=1` ahora incluye `hash` y `versiones_count`. Las listas de Revisión, Aprobados, Registro, Documentos por EPI, Observaciones, Mis documentos y Subir documento usan resumen; el detalle se pide con `/documentos/{id}`.
+- `GET /api/revisiones?sin_documento=1`: no incluye el expediente completo en cada revisión. Lo usa Observaciones, que además calcula la última revisión con un Map.
+- Listas largas por tramos de 60 (`useListaProgresiva` + `MasResultados`) en ambos Historiales, Revisión, Aprobados, Registro, Observaciones y Auditoría. Todos los datos siguen accesibles.
+- Las cargas de listados muestran el esqueleto `CargandoLista` en vez del spinner (19 pantallas).
+- El sondeo del modo en vivo (`useSincronizacion`) cede su turno mientras haya peticiones de pantalla en curso (`api.ocupado()`).
+- Dashboard del Comando Departamental reorganizado: la tabla de recientes ocupa todo el ancho y suma la columna Referencia; Cruce por EPI comparte fila con Accesos rápidos; Reglas del dictamen es una franja de 3 columnas. Así no quedan huecos al bajar.
+- Dashboard del Comando General: la actividad por unidad muestra las 9 EPIs (antes 7).
+- CSS: superficies heredadas alineadas con `.ofbol-card`, ancho de 1440 px en pantallas grandes, celdas de nombre con ancho mínimo, `.ofbol-enlace-accion`, `.ofbol-btn-fila`, hover de accesos rápidos y esqueleto con respiración (respeta reduced-motion).
+
+### 2026-11-12 · Portada y login (respaldo: `.claude/backups/2026-11-12-portada-login/`)
+- Portada (`views/inicio/Inicio.jsx`): menos texto (sin la etiqueta superior, descripciones de una línea, características convertidas en chips). Espacios para fotografías reales en cada paso y una galería &quot;Al servicio de La Paz&quot;. Las fotos se configuran en `js/components/landing/fotosInicio.js` y se guardan en `public/images/inicio/` (ver LEEME.txt). Si falta una foto, su espacio no aparece.
+- Login (`views/login/Login.jsx`): botón &quot;Volver a la página inicial&quot; arriba a la izquierda (`.pb-login-volver` en login-characters.css). Se quitó el enlace &quot;← Página principal&quot; que estaba dentro de la tarjeta.
+- Verificado en vivo tras el build: el Panel Departamental quedó sin huecos (Cruce y Accesos a 413 px de alto cada uno; la tabla sin desbordar a 1600 px). Historial: de 27.821 a 1.615 elementos en pantalla.
+
+### 2026-11-12 · Ajuste de tablas detectado al capturar el informe
+- `app.css`: las tablas de 8 o más columnas (Cola de Revisión, bandejas) usan celdas de 12 px de relleno horizontal, para que la columna de acciones no quede cortada a 1600 px. Ancho mínimo de las celdas con nombre: 9rem.
+- `GestionUsuarios.jsx`: los correos largos pueden partirse (`[overflow-wrap:anywhere]`), para que el botón &quot;Desactivar&quot; no quede fuera de la tabla. Requiere `npm run build`.
+
+## Cómo usar este mapa
+- Antes de editar algo, ubica la pantalla → endpoint → controlador → modelo/tabla en este mapa.
+- Para detalle, consulta `graphify-out/graph.json` (con Graphify instalado: `graphify query &quot;...&quot;`, `graphify path A B`, `graphify explain X`).
+- Si el código cambia mucho, regenera el mapa y vuelve a enviarlo.</script>
+<script>
+const q=document.getElementById('q');q.addEventListener('input',()=>{const v=q.value.toLowerCase();document.querySelectorAll('li').forEach(li=>li.style.display=!v||li.textContent.toLowerCase().includes(v)?'':'none')});
+</script></body></html>
